@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # ZipcodeXpress Website
 
 A modern, responsive website for ZipcodeXpress built with React.js and Vite, inspired by Brevo.com's clean design and smooth animations.
