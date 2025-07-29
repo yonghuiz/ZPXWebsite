@@ -1,0 +1,7 @@
+<svg width="150" height="60" viewBox="0 0 150 60" xmlns="http://www.w3.org/2000/svg">
+  <rect width="150" height="60" fill="#f8f9fa" rx="8"/>
+  <text x="75" y="25" font-family="Arial, sans-serif" font-size="14" font-weight="bold" text-anchor="middle" fill="#0066cc">JBG SMITH</text>
+  <text x="75" y="40" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="#666">PROPERTIES</text>
+  <rect x="15" y="15" width="8" height="8" fill="#0066cc" transform="rotate(45 19 19)"/>
+  <rect x="127" y="37" width="8" height="8" fill="#00cc66" transform="rotate(45 131 41)"/>
+</svg>

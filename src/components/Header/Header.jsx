@@ -31,7 +31,10 @@ const Header = () => {
         { label: 'Apartment', href: '/markets/apartment' },
         { label: 'Office', href: '/markets/office' },
         { label: 'School', href: '/markets/school' },
-        { label: 'Grocery Store', href: '/markets/grocery-store' }
+        { label: 'Grocery Store', href: '/markets/grocery-store' },
+        { label: 'Asset Management', href: '/markets/asset-management' },
+        { label: 'Food Service', href: '/markets/food' },
+        { label: 'eCommerce', href: '/markets/ecommerce' }
       ]
     },
     {

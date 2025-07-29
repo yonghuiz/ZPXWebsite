@@ -8,6 +8,7 @@ const Register = () => {
     phone: '',
     email: '',
     city: '',
+    state: '',
     address: '',
     apartmentUnits: '',
     installationDate: '',
@@ -43,6 +44,7 @@ const Register = () => {
           phone: '',
           email: '',
           city: '',
+          state: '',
           address: '',
           apartmentUnits: '',
           installationDate: '',
@@ -61,26 +63,25 @@ const Register = () => {
 
   return (
     <div className="register-page">
-      <section className="register-hero">
-        <div className="register-hero__container">
-          <h1 className="register-hero__title">Register For Free Locker</h1>
-          <p className="register-hero__subtitle">
-            Please answer below questions, we will discuss with you about the number of locker units you need and the models.
-          </p>
+      <section className="register-banner">
+        <div className="register-banner__container">
+          <img 
+            src="/images/locker-line-up@2x-1-2048x882.png" 
+            alt="Locker Line Up"
+            className="register-banner-image"
+          />
+          <div className="register-banner__overlay">
+            <h1 className="register-banner__title">Register For Free Locker</h1>
+            <p className="register-banner__subtitle">
+              Please answer below questions, we will discuss with you about the number of locker units you need and the models.
+            </p>
+          </div>
         </div>
       </section>
 
       <section className="register-content">
         <div className="register-content__container">
-          <div className="register-form-section">
-            <div className="register-image">
-              <img 
-                src="/public/locker-lineup.jpg" 
-                alt="Locker Line Up"
-                className="register-image__img"
-              />
-            </div>
-
+          <div className="register-form-wrapper">
             <div className="register-form">
               <form onSubmit={handleSubmit} className="registration-form">
                 <div className="form-group">

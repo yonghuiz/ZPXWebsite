@@ -7,7 +7,10 @@ import Apartment from './pages/Markets/Apartment'
 import Office from './pages/Markets/Office'
 import School from './pages/Markets/School'
 import GroceryStore from './pages/Markets/GroceryStore'
-import PackageLocker from './pages/Products/PackageLocker'
+import MarketAssetManagement from './pages/Markets/AssetManagement'
+import Food from './pages/Markets/Food'
+import ECommerce from './pages/Markets/ECommerce'
+import PackageLocker from './pages/Products/PackageLocker/PackageLocker'
 import TakeoutLocker from './pages/Products/TakeoutLocker'
 import RefrigeratedLocker from './pages/Products/RefrigeratedLocker'
 import AssetManagement from './pages/Products/AssetManagement'
@@ -28,6 +31,9 @@ function App() {
           <Route path="/markets/office" element={<Office />} />
           <Route path="/markets/school" element={<School />} />
           <Route path="/markets/grocery-store" element={<GroceryStore />} />
+          <Route path="/markets/asset-management" element={<MarketAssetManagement />} />
+          <Route path="/markets/food" element={<Food />} />
+          <Route path="/markets/ecommerce" element={<ECommerce />} />
           <Route path="/products/package-locker" element={<PackageLocker />} />
           <Route path="/products/takeout-locker" element={<TakeoutLocker />} />
           <Route path="/products/refrigerated-locker" element={<RefrigeratedLocker />} />

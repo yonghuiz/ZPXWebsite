@@ -1,83 +1,130 @@
 import React from 'react';
-import { motion } from 'framer-motion';
 import './MarketPage.css';
 
 const Office = () => {
   return (
-    <div className="market-page">
-      <motion.section 
-        className="market-hero"
-        initial={{ opacity: 0, y: 50 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8 }}
-      >
-        <div className="market-hero__container">
-          <div className="market-hero__content">
-            <h1 className="market-hero__title">Office Building Solutions</h1>
-            <p className="market-hero__subtitle">
-              Secure and efficient package management for office environments
-            </p>
+    <div className="market-page office-page">
+      {/* Hero Banner Section with reference background */}
+      <section className="office-banner0">
+        <div className="office-banner0-text-wrapper">
+          <h1 className="office-banner0-title">Package Management Solutions</h1>
+          <p className="office-banner0-content">for Offices</p>
+          <button className="banner0-button">Learn More</button>
+        </div>
+      </section>
+
+      {/* Current Problems Section */}
+      <section className="office-content1-wrapper">
+        <div className="container office-content1">
+          <div className="office-content1-img">
+            <img 
+              src="https://unibox-us.oss-us-east-1.aliyuncs.com/Website_Image/FOR%20OFFICE_slices/pic_office.png" 
+              alt="Office package delivery problems" 
+            />
+          </div>
+          <div className="office-content1-text">
+            <h2 className="office-content1-title">Current Problems</h2>
+            <div className="office-content1-content">
+              <p>
+                AS AN EMPLOYEE, are you ever in the situation that personal deliveries keep bothering you during your work time? 
+                Do you experience the uncomfortable feeling on the way back to home carrying all the packages? 
+                Have you ever embarrassed receiving large packages at your office?
+              </p>
+              <p>
+                AS A BUILDING MANAGER, is your receptionist overwhelmed by packages but she still has many other responsibilities to serve? 
+                Do you run out of space to store all the packages deliveries for your building tenants? 
+                Are you tired of complaints about packages delays and been lost?
+              </p>
+            </div>
           </div>
         </div>
-      </motion.section>
+      </section>
 
-      <section className="market-content">
-        <div className="market-content__container">
-          <div className="market-problems">
-            <h2>Office Package Management Challenges</h2>
-            <div className="problems-grid">
-              <div className="problem-card">
-                <h3>Property Manager</h3>
-                <p>Do you feel the property is not secured when carriers visit offices to deliver packages?</p>
-              </div>
-              <div className="problem-card">
-                <h3>Employees</h3>
-                <p>Are you concerned about your privacy when colleagues sign packages for you?</p>
-              </div>
+      {/* Solution Banner Section */}
+      <section className="office-banner4">
+        <div className="container office-banner4-page">
+          <div className="office-banner4-title-wrapper">
+            <h2 className="office-banner4-title">How do we resolve</h2>
+            <div className="office-banner4-content">
+              <p>
+                Packages are delivered directly to smart lockers in office buildings. 
+                Employees receive instant notifications and can pick up packages at their convenience. 
+                Reception staff are freed from package management duties to focus on their primary responsibilities.
+              </p>
             </div>
           </div>
+          <div className="office-banner4-image">
+            <img 
+              src="https://unibox-us.oss-us-east-1.aliyuncs.com/Website_Image/FOR%20OFFICE_slices/pic_office.png" 
+              alt="Smart office locker solution" 
+            />
+          </div>
+        </div>
+      </section>
 
-          <div className="market-solution">
-            <h2>Zippora Office Solutions</h2>
+      {/* Benefits Section */}
+      <section className="office-feature7-wrapper">
+        <div className="container">
+          <div className="office-feature7-title-wrapper">
+            <h2 className="office-feature7-title">Professional workplace efficiency</h2>
+          </div>
+          <div className="office-feature7-block-wrapper">
+            <div className="office-feature7-block">
+              <div className="office-feature7-block-group">
+                <div className="office-feature7-block-image">
+                  <div className="solution-icon">⚡</div>
+                </div>
+                <p className="office-feature7-block-content">
+                  Fast pickup without reception interruption
+                </p>
+              </div>
+            </div>
             
-            <div className="solution-features">
-              <div className="feature-item">
-                <h4>Enhanced Security</h4>
-                <p>Controlled access prevents unauthorized personnel from entering office areas</p>
+            <div className="office-feature7-block">
+              <div className="office-feature7-block-group">
+                <div className="office-feature7-block-image">
+                  <div className="solution-icon">📦</div>
+                </div>
+                <p className="office-feature7-block-content">
+                  Secure package storage for professional environments
+                </p>
               </div>
-              <div className="feature-item">
-                <h4>Privacy Protection</h4>
-                <p>Personal packages remain confidential with individual locker access</p>
+            </div>
+            
+            <div className="office-feature7-block">
+              <div className="office-feature7-block-group">
+                <div className="office-feature7-block-image">
+                  <div className="solution-icon">🕒</div>
+                </div>
+                <p className="office-feature7-block-content">
+                  24/7 availability for busy work schedules
+                </p>
               </div>
-              <div className="feature-item">
-                <h4>Reception Relief</h4>
-                <p>Reduce front desk workload and improve professional appearance</p>
-              </div>
-              <div className="feature-item">
-                <h4>Flexible Access</h4>
-                <p>Employees can retrieve packages at their convenience</p>
+            </div>
+            
+            <div className="office-feature7-block">
+              <div className="office-feature7-block-group">
+                <div className="office-feature7-block-image">
+                  <div className="solution-icon">📱</div>
+                </div>
+                <p className="office-feature7-block-content">
+                  Real-time notifications for immediate pickup
+                </p>
               </div>
             </div>
           </div>
+        </div>
+      </section>
 
-          <div className="market-benefits">
-            <h2>Office Building Benefits</h2>
-            <ul className="benefits-list">
-              <li>Improved building security and access control</li>
-              <li>Enhanced employee privacy and satisfaction</li>
-              <li>Reduced reception desk interruptions</li>
-              <li>Professional corporate image</li>
-              <li>Streamlined delivery processes</li>
-              <li>Real-time package tracking and notifications</li>
-            </ul>
-          </div>
-
-          <div className="market-cta">
-            <h2>Upgrade Your Office Package System</h2>
-            <p>Join leading companies using Zippora Smart Lockers for secure office deliveries</p>
-            <div className="cta-buttons">
+      {/* CTA Section */}
+      <section className="office-cta-section">
+        <div className="container">
+          <div className="office-cta-content">
+            <h2>Ready to Streamline Your Office Package Management?</h2>
+            <p>Contact us today to learn more about our smart locker solutions for office buildings.</p>
+            <div className="office-cta-buttons">
               <a href="/register" className="btn btn-primary">Request Quote</a>
-              <a href="/contact-us" className="btn btn-outline">Contact Us</a>
+              <a href="/contact-us" className="btn btn-outline">Contact Sales</a>
             </div>
           </div>
         </div>

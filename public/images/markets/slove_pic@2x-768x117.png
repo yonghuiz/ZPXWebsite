@@ -1,0 +1,7 @@
+<!-- This is a placeholder SVG for the solution overview image -->
+<svg width="768" height="117" viewBox="0 0 768 117" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="768" height="117" fill="#f0f0f0" stroke="#ddd" stroke-width="2"/>
+  <text x="384" y="65" text-anchor="middle" fill="#666" font-family="Arial, sans-serif" font-size="16">
+    ZipcodeXpress Solution Overview
+  </text>
+</svg>

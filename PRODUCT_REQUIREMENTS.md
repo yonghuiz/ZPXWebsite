@@ -60,7 +60,7 @@ This document outlines the requirements for rebuilding the ZipcodeXpress website
 ### 3. Customer Logos Section (Brevo-style Animation)
 - **Title**: "Trusted by Property Managers Nationwide"
 - **Animated Logo Carousel**: Continuous scrolling customer logos
-- **Client Count**: "Join 1000+ satisfied customers"
+- **Client Count**: "Join 100+ satisfied customers"
 
 ### 4. Solutions Overview
 - **Title**: "One Platform, Multiple Solutions"
