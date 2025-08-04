@@ -1,130 +1,174 @@
 import React from 'react';
-import './MarketPage.css';
+import './AssetManagement.css';
 
 const AssetManagement = () => {
   return (
-    <div className="market-page asset-page">
-      {/* Hero Banner Section with reference background */}
-      <section className="asset-banner0">
-        <div className="asset-banner0-text-wrapper">
-          <h1 className="asset-banner0-title">Package Management Solutions</h1>
-          <p className="asset-banner0-content">for Asset Management</p>
-          <button className="banner0-button">Learn More</button>
+    <div className="asset-management-page">
+      {/* Hero Banner Section */}
+      <section className="asset-banner">
+        <div className="asset-banner-content">
+          <h1 className="asset-banner-title">Asset Management & Tools Rental Locker</h1>
+          <p className="asset-banner-subtitle">
+            Smart inventory control and tool rental management solutions for modern businesses
+          </p>
+          <button className="asset-banner-btn">Learn More</button>
         </div>
       </section>
 
       {/* Current Problems Section */}
-      <section className="asset-content1-wrapper">
-        <div className="container asset-content1">
-          <div className="asset-content1-img">
+      <section className="asset-content-section">
+        <div className="asset-content-container">
+          <div className="asset-content-left">
             <img 
               src="https://unibox-us.oss-us-east-1.aliyuncs.com/Website_Image/tools_rental/pic1%402x.png" 
-              alt="Asset management package delivery problems" 
+              alt="Current Problems" 
+              className="asset-content-image"
             />
           </div>
-          <div className="asset-content1-text">
-            <h2 className="asset-content1-title">Current Problems</h2>
-            <div className="asset-content1-content">
+          <div className="asset-content-right">
+            <h2 className="asset-content-title">Current Problems</h2>
+            <div className="asset-content-text">
               <p>
-                AS A TENANT, do you find it difficult to be reached all the time in case packages that show delivery confirmation yet you never receive them? 
-                Do you ever miss the delivery time because you are at work? 
-                Do you feel it's unsafe to leave packages at the door front?
+                • Office staff, students are sharing tools, equipment or devices, but don't know the availability, and who is now possessing them, and when they can borrow. So tools and equipment can not be used efficiently, cost more money for companies or schools to buy more.
               </p>
+              <br />
               <p>
-                AS A PROPERTY MANAGER, do you constantly receive phone calls or visit inquiries from tenants complaining about their missing packages? 
-                Do you constantly spend time on sorting and tracking packages that interrupt your other duties? 
-                Are you questioned about apartment liability on lost packages?
+                • Cost of labor to management the check-in and check-out of the tools and parts.
+              </p>
+              <br />
+              <p>
+                • No data of the utilization of the tools so to affect the budgeting to buy.
+              </p>
+              <br />
+              <p>
+                • Customers would like to rent tools when all stores are closed in the nights or holidays.
+              </p>
+              <br />
+              <p>
+                • Rental stores would like to generate more revenue yet don't want to pay extra labor fees.
               </p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Solution Banner Section */}
-      <section className="asset-banner4">
-        <div className="container asset-banner4-page">
-          <div className="asset-banner4-title-wrapper">
-            <h2 className="asset-banner4-title">How do we resolve</h2>
-            <div className="asset-banner4-content">
-              <p>
-                Professional-grade smart lockers provide secure package storage for multi-unit properties. 
-                Tenants receive instant notifications and can access packages anytime. 
-                Property managers reduce liability and administrative burden while improving tenant satisfaction.
-              </p>
-            </div>
-          </div>
-          <div className="asset-banner4-image">
+      {/* How We Resolve Title */}
+      <section className="asset-resolve-title">
+        <h1>How do we resolve</h1>
+      </section>
+
+      {/* Solution Section 1 */}
+      <section className="asset-content-section">
+        <div className="asset-content-container">
+          <div className="asset-content-left">
             <img 
-              src="https://unibox-us.oss-us-east-1.aliyuncs.com/Website_Image/apartment/pic2_apartment.png" 
-              alt="Smart property management locker solution" 
+              src="https://unibox-us.oss-us-east-1.aliyuncs.com/Website_Image/tools_rental/pic2%402x.png" 
+              alt="Free up staff" 
+              className="asset-content-image"
             />
           </div>
-        </div>
-      </section>
-
-      {/* Benefits Section */}
-      <section className="asset-feature7-wrapper">
-        <div className="container">
-          <div className="asset-feature7-title-wrapper">
-            <h2 className="asset-feature7-title">Professional property management</h2>
-          </div>
-          <div className="asset-feature7-block-wrapper">
-            <div className="asset-feature7-block">
-              <div className="asset-feature7-block-group">
-                <div className="asset-feature7-block-image">
-                  <div className="solution-icon">🏢</div>
-                </div>
-                <p className="asset-feature7-block-content">
-                  Professional property management solutions
-                </p>
-              </div>
-            </div>
-            
-            <div className="asset-feature7-block">
-              <div className="asset-feature7-block-group">
-                <div className="asset-feature7-block-image">
-                  <div className="solution-icon">🔒</div>
-                </div>
-                <p className="asset-feature7-block-content">
-                  Secure package storage with liability protection
-                </p>
-              </div>
-            </div>
-            
-            <div className="asset-feature7-block">
-              <div className="asset-feature7-block-group">
-                <div className="asset-feature7-block-image">
-                  <div className="solution-icon">📋</div>
-                </div>
-                <p className="asset-feature7-block-content">
-                  Automated tracking and management systems
-                </p>
-              </div>
-            </div>
-            
-            <div className="asset-feature7-block">
-              <div className="asset-feature7-block-group">
-                <div className="asset-feature7-block-image">
-                  <div className="solution-icon">👥</div>
-                </div>
-                <p className="asset-feature7-block-content">
-                  Improved tenant satisfaction and retention
-                </p>
-              </div>
+          <div className="asset-content-right">
+            <div className="asset-content-text">
+              <p>
+                Free up staff to for tools, parts and equipment management.
+              </p>
+              <br />
+              <p>
+                Be able to track all the tools and equipment usage, and the people who are using them.
+              </p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="asset-cta-section">
-        <div className="container">
-          <div className="asset-cta-content">
-            <h2>Ready to Enhance Your Property Management?</h2>
-            <p>Contact us today to learn more about our smart locker solutions for asset management companies.</p>
-            <div className="asset-cta-buttons">
-              <a href="/register" className="btn btn-primary">Request Quote</a>
-              <a href="/contact-us" className="btn btn-outline">Contact Sales</a>
+      {/* Solution Section 2 - Reversed Layout */}
+      <section className="asset-content-section">
+        <div className="asset-content-container asset-content-reverse">
+          <div className="asset-content-left">
+            <img 
+              src="https://unibox-us.oss-us-east-1.aliyuncs.com/Website_Image/tools_rental/pic3%402x.png" 
+              alt="Data collection" 
+              className="asset-content-image"
+            />
+          </div>
+          <div className="asset-content-right">
+            <div className="asset-content-text">
+              <p>
+                Collect all the data of the utilization, so to improve the efficiency and save the cost
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Solution Section 3 */}
+      <section className="asset-content-section">
+        <div className="asset-content-container">
+          <div className="asset-content-left">
+            <img 
+              src="https://unibox-us.oss-us-east-1.aliyuncs.com/Website_Image/tools_rental/pic4%402x.png" 
+              alt="Easy tool rental" 
+              className="asset-content-image"
+            />
+          </div>
+          <div className="asset-content-right">
+            <div className="asset-content-text">
+              <p>
+                Tools rental becomes so easy. Operate like a vending machine, customers only need to swipe their cards and pick up the tools you like.
+              </p>
+              <br />
+              <p>
+                All transactions are managed by our tool rental locker system, which you can oversee via our cloud management system.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Suitable Places Section */}
+      <section className="asset-suitable-places">
+        <div className="asset-places-container">
+          <h2 className="asset-places-title">Suitable Places</h2>
+          <div className="asset-places-grid">
+            <div className="asset-place-item">
+              <img 
+                src="https://unibox-us.oss-us-east-1.aliyuncs.com/Website_Image/tools_rental/residential__icon.png" 
+                alt="Residential Complex" 
+                className="asset-place-icon"
+              />
+              <p className="asset-place-text">Residential Complex</p>
+            </div>
+            <div className="asset-place-item">
+              <img 
+                src="https://unibox-us.oss-us-east-1.aliyuncs.com/Website_Image/tools_rental/school_icon.png" 
+                alt="School/Business" 
+                className="asset-place-icon"
+              />
+              <p className="asset-place-text">School/Business</p>
+            </div>
+            <div className="asset-place-item">
+              <img 
+                src="https://unibox-us.oss-us-east-1.aliyuncs.com/Website_Image/tools_rental/hospital_icon.png" 
+                alt="Hospital" 
+                className="asset-place-icon"
+              />
+              <p className="asset-place-text">Hospital</p>
+            </div>
+            <div className="asset-place-item">
+              <img 
+                src="https://unibox-us.oss-us-east-1.aliyuncs.com/Website_Image/tools_rental/home%20depot_icon.png" 
+                alt="Home depot/Lowes" 
+                className="asset-place-icon"
+              />
+              <p className="asset-place-text">Home depot/Lowes</p>
+            </div>
+            <div className="asset-place-item">
+              <img 
+                src="https://unibox-us.oss-us-east-1.aliyuncs.com/Website_Image/tools_rental/tool%20rental_icon.png" 
+                alt="Tools Rental/Asset Mgmt" 
+                className="asset-place-icon"
+              />
+              <p className="asset-place-text">Tools Rental/Asset Mgmt</p>
             </div>
           </div>
         </div>

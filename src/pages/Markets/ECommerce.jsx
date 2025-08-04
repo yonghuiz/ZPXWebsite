@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import './MarketPage.css';
 
 const ECommerce = () => {
@@ -158,7 +159,7 @@ const ECommerce = () => {
             <h2>Ready to Revolutionize Your eCommerce Experience?</h2>
             <p>Contact us today to learn more about our smart locker solutions for retail and eCommerce.</p>
             <div className="ecommerce-cta-buttons">
-              <a href="/register" className="btn btn-primary">Request Quote</a>
+              <Link to="/register" className="btn btn-primary">Request Quote</Link>
               <a href="/contact-us" className="btn btn-outline">Contact Sales</a>
             </div>
           </div>

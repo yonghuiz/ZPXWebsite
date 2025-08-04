@@ -12,7 +12,6 @@ const Footer = () => {
         { label: 'Apartments & Condos', href: '#apartment' },
         { label: 'Office Buildings', href: '#office' },
         { label: 'School Campus', href: '#school' },
-        { label: 'Grocery Stores', href: '#grocery' },
         { label: 'Food Service', href: '#foodservice' }
       ]
     },
@@ -52,7 +51,8 @@ const Footer = () => {
         <div className="footer__main">
           <div className="footer__brand">
             <div className="footer__logo">
-              <img src="/logo.svg" alt="ZipcodeXpress" className="footer__logo-img" />
+              <img src="/Icon-512.png" alt="ZipcodeXpress logo" className="footer__logo-img" />
+              
               <span className="footer__logo-text">ZipcodeXpress</span>
             </div>
             <p className="footer__description">
@@ -92,7 +92,7 @@ const Footer = () => {
         </div>
 
         <div className="footer__apps">
-          <h4 className="footer__apps-title">Download Our App</h4>
+          <h4 className="footer__apps-title">Download Our App "ZipcodeXpress"</h4>
           <div className="footer__app-buttons">
             <a href="#ios-app" className="footer__app-button">
               <FaAppStore className="footer__app-icon" />

@@ -1,25 +1,13 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
 import './CustomerLogos.css';
 
 const CustomerLogos = () => {
   // Customer logos - using actual customer logo files
   const customerLogos = [
-    {
-      name: "100% Satisfaction",
-      logo: "/customer-logos/100-percent-satisfaction.png",
-      alt: "100% Satisfaction Guarantee"
-    },
-    {
-      name: "Christopher Commercial Inc",
-      logo: "/customer-logos/Christopher-Commercial-Inc..png",
-      alt: "Christopher Commercial Inc"
-    },
-    {
-      name: "Clear",
-      logo: "/customer-logos/Clear.jpg",
-      alt: "Clear"
-    },
+    
+   
     {
       name: "Greystar",
       logo: "/customer-logos/greystar.jpg",
@@ -46,6 +34,36 @@ const CustomerLogos = () => {
       alt: "MAA"
     },
     {
+      name: "Asset Living",
+      logo: "/customer-logos/assetliving.png",
+      alt: "Asset Living"
+    },
+    {
+      name: "RPM Living",
+      logo: "/customer-logos/RPM-living.png",
+      alt: "RPM Living"
+    },
+    {
+      name: "Univ Of Washington",
+      logo: "/customer-logos/UnivOfWashington.png",
+      alt: "Univ Of Washington"
+    },
+      {
+      name: "Sylis Properties",
+      logo: "/customer-logos/sylislogo.png",
+      alt: "Sylis Properties"
+    },
+    {
+      name: "Apartment Management Professionals",
+      logo: "/customer-logos/amp.jpg",
+      alt: "Apartment Management Professionals"
+    },
+    {
+      name: "Landmark",
+      logo: "/customer-logos/landmark.png",
+      alt: "Landmark Properties"
+    },
+     {
       name: "Christopher Commercial Inc",
       logo: "/customer-logos/Christopher-Commercial-Inc..png",
       alt: "Christopher Commercial Inc"
@@ -54,11 +72,6 @@ const CustomerLogos = () => {
       name: "Clear",
       logo: "/customer-logos/Clear.jpg",
       alt: "Clear"
-    },
-    {
-      name: "Horizon",
-      logo: "/customer-logos/Horizon.jpg",
-      alt: "Horizon"
     }
   ];
 
@@ -110,9 +123,9 @@ const CustomerLogos = () => {
         >
           <p className="customer-logos__cta">
             Want to join these industry leaders? 
-            <a href="#quote" className="customer-logos__link">
+            <Link to="/register" className="customer-logos__link">
               Request a quote today
-            </a>
+            </Link>
           </p>
         </motion.div>
       </div>

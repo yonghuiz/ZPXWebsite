@@ -1,5 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
 import { FaArrowRight, FaPlay, FaCheck } from 'react-icons/fa';
 import './Hero.css';
 
@@ -54,10 +55,10 @@ const Hero = () => {
             </ul>
 
             <div className="hero__cta">
-              <a href="/register" className="btn btn-primary hero__cta-primary">
+              <Link to="/register" className="btn btn-primary hero__cta-primary">
                 Request Quote
                 <FaArrowRight className="hero__cta-icon" />
-              </a>
+              </Link>
               <a href="#demo" className="btn btn-outline hero__cta-secondary">
                 <FaPlay className="hero__cta-icon" />
                 Watch Demo

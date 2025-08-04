@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import './MarketPage.css';
 
 const GroceryStore = () => {
@@ -72,7 +73,7 @@ const GroceryStore = () => {
           {/* CTA Section */}
           <div className="market-cta">
             <div className="cta-buttons">
-              <a href="/register" className="btn btn-primary">Request Quote</a>
+              <Link to="/register" className="btn btn-primary">Request Quote</Link>
             </div>
           </div>
 

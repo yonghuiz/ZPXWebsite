@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import './MarketPage.css';
 
 const Apartment = () => {
@@ -58,6 +59,17 @@ const Apartment = () => {
               alt="Smart locker solution" 
             />
           </div>
+        </div>
+      </section>
+
+      {/* Showcase Image */}
+      <section className="showcase-image-section">
+        <div className="container">
+          <img 
+            src="/images/Showcase1.png" 
+            alt="Smart Locker Showcase" 
+            className="showcase-image"
+          />
         </div>
       </section>
 
@@ -134,7 +146,7 @@ const Apartment = () => {
             <h2>Ready to Transform Your Package Management?</h2>
             <p>Contact us today to learn more about our smart locker solutions for apartments.</p>
             <div className="apt-cta-buttons">
-              <a href="/register" className="btn btn-primary">Request Quote</a>
+              <Link to="/register" className="btn btn-primary">Request Quote</Link>
               <a href="/contact-us" className="btn btn-outline">Contact Sales</a>
             </div>
           </div>

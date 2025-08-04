@@ -146,11 +146,11 @@ const FAQ = () => {
               </div>
               <div className="contact-option">
                 <h4>Phone Support</h4>
-                <p>(555) 234-5678</p>
+                <p>(800) 883-9662</p>
               </div>
               <div className="contact-option">
                 <h4>Business Hours</h4>
-                <p>Monday - Friday: 8 AM - 6 PM EST</p>
+                <p>Monday - Friday: 8 AM - 8 PM CST</p>
               </div>
             </div>
           </div>

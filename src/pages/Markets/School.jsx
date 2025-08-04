@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import './MarketPage.css';
 
 const School = () => {
@@ -55,10 +56,21 @@ const School = () => {
           </div>
           <div className="school-banner4-image">
             <img 
-              src="https://unibox-us.oss-us-east-1.aliyuncs.com/Website_Image/school_slices/pic2_school%402x.png" 
+              src="/images/school-2.png" 
               alt="Smart campus locker solution" 
             />
           </div>
+        </div>
+      </section>
+
+      {/* School Image Section */}
+      <section className="school-image-section">
+        <div className="container">
+          <img 
+            src="/images/Picture1.png" 
+            alt="School Campus Lockers" 
+            className="school-feature-image"
+          />
         </div>
       </section>
 
@@ -123,7 +135,7 @@ const School = () => {
             <h2>Ready to Modernize Your Campus Package Management?</h2>
             <p>Contact us today to learn more about our smart locker solutions for educational institutions.</p>
             <div className="school-cta-buttons">
-              <a href="/register" className="btn btn-primary">Request Quote</a>
+              <Link to="/register" className="btn btn-primary">Request Quote</Link>
               <a href="/contact-us" className="btn btn-outline">Contact Sales</a>
             </div>
           </div>

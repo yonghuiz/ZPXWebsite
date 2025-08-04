@@ -31,7 +31,6 @@ const Header = () => {
         { label: 'Apartment', href: '/markets/apartment' },
         { label: 'Office', href: '/markets/office' },
         { label: 'School', href: '/markets/school' },
-        { label: 'Grocery Store', href: '/markets/grocery-store' },
         { label: 'Asset Management', href: '/markets/asset-management' },
         { label: 'Food Service', href: '/markets/food' },
         { label: 'eCommerce', href: '/markets/ecommerce' }
@@ -120,6 +119,31 @@ const Header = () => {
               </li>
             ))}
           </ul>
+          
+          {/* Mobile contact info and actions */}
+          <div className="header__contact">
+            <a href="tel:18008839662" className="header__contact-link">
+              <FaPhone className="header__contact-icon" />
+              <span className="header__contact-text">1.800.883.9662</span>
+            </a>
+          </div>
+          
+          <div className="header__cta">
+            <a 
+              href="https://account.zipcodexpress.com/" 
+              className="btn btn-outline header__login"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              Login
+            </a>
+            <Link 
+              to="/register" 
+              className="btn btn-primary header__quote"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              Request Quote
+            </Link>
+          </div>
         </nav>
 
         <div className="header__actions">
@@ -133,9 +157,9 @@ const Header = () => {
             <a href="https://account.zipcodexpress.com/" className="btn btn-outline header__login">
               Login
             </a>
-            <a href="/register" className="btn btn-primary header__quote">
+            <Link to="/register" className="btn btn-primary header__quote">
               Request Quote
-            </a>
+            </Link>
           </div>
         </div>
 

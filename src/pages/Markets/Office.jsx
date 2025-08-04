@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import './MarketPage.css';
 
 const Office = () => {
@@ -55,10 +56,21 @@ const Office = () => {
           </div>
           <div className="office-banner4-image">
             <img 
-              src="https://unibox-us.oss-us-east-1.aliyuncs.com/Website_Image/FOR%20OFFICE_slices/pic_office.png" 
+              src="/images/slide1.jpg" 
               alt="Smart office locker solution" 
             />
           </div>
+        </div>
+      </section>
+
+      {/* Office Image Section */}
+      <section className="office-image-section">
+        <div className="container">
+          <img 
+            src="/images/pic2_school-2.png" 
+            alt="Office Smart Lockers" 
+            className="office-feature-image"
+          />
         </div>
       </section>
 
@@ -123,7 +135,7 @@ const Office = () => {
             <h2>Ready to Streamline Your Office Package Management?</h2>
             <p>Contact us today to learn more about our smart locker solutions for office buildings.</p>
             <div className="office-cta-buttons">
-              <a href="/register" className="btn btn-primary">Request Quote</a>
+              <Link to="/register" className="btn btn-primary">Request Quote</Link>
               <a href="/contact-us" className="btn btn-outline">Contact Sales</a>
             </div>
           </div>

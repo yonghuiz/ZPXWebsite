@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './ContactPage.css';
+import { sendContactEmail } from '../../utils/emailService.js';
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -10,6 +11,9 @@ const Contact = () => {
     message: ''
   });
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState(''); // 'success', 'error', or ''
+
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -17,11 +21,56 @@ const Contact = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle form submission logic here
-    console.log('Form submitted:', formData);
-    alert('Thank you for your message! We will get back to you soon.');
+    
+    // Prevent multiple submissions
+    if (isSubmitting) return;
+    
+    setIsSubmitting(true);
+    setSubmitStatus('');
+    
+    try {
+      console.log('Submitting contact form:', formData);
+      
+      // Prepare data with subject field for EmailJS
+      const emailData = {
+        name: formData.name,
+        email: formData.email,
+        subject: formData.company ? `Contact from ${formData.company}` : 'Website Contact',
+        message: `
+Name: ${formData.name}
+Email: ${formData.email}
+Company: ${formData.company || 'Not specified'}
+Phone: ${formData.phone || 'Not specified'}
+
+Message:
+${formData.message}
+        `.trim()
+      };
+      
+      // Send email via EmailJS
+      const result = await sendContactEmail(emailData);
+      
+      if (result.success) {
+        setSubmitStatus('success');
+        // Reset form
+        setFormData({
+          name: '',
+          email: '',
+          company: '',
+          phone: '',
+          message: ''
+        });
+      } else {
+        throw new Error('Failed to send message');
+      }
+    } catch (error) {
+      console.error('Error sending contact form:', error);
+      setSubmitStatus('error');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -41,7 +90,7 @@ const Contact = () => {
             <div className="contact-info">
               <h2>Get In Touch</h2>
               <p>
-                Ready to transform your package management? Our team is here to help 
+                Ready to transform your package management? Our team is here to help
                 you find the perfect solution for your needs.
               </p>
 
@@ -49,38 +98,29 @@ const Contact = () => {
                 <div className="contact-method">
                   <h4>Sales Inquiries</h4>
                   <p>sales@zipcodexpress.com</p>
-                  <p>(555) 123-4567</p>
+                  <p>(800)883-9662 ext 2</p>
                 </div>
 
                 <div className="contact-method">
                   <h4>Technical Support</h4>
                   <p>support@zipcodexpress.com</p>
-                  <p>(555) 234-5678</p>
+                  <p>(800)883-9662 ext 1</p>
                 </div>
 
                 <div className="contact-method">
                   <h4>General Information</h4>
                   <p>info@zipcodexpress.com</p>
-                  <p>(555) 345-6789</p>
+                  <p>(800)883-9662</p>
                 </div>
 
                 <div className="contact-method">
                   <h4>Business Hours</h4>
-                  <p>Monday - Friday: 8:00 AM - 6:00 PM EST</p>
-                  <p>Saturday: 9:00 AM - 2:00 PM EST</p>
+                  <p>Monday - Saturday: 1:00 AM - 8:00 PM CST</p>
                   <p>Sunday: Closed</p>
                 </div>
               </div>
 
-              <div className="office-info">
-                <h4>Corporate Headquarters</h4>
-                <p>
-                  123 Technology Drive<br />
-                  Suite 456<br />
-                  Innovation City, IC 12345<br />
-                  United States
-                </p>
-              </div>
+
             </div>
 
             <div className="contact-form-section">
@@ -96,6 +136,7 @@ const Contact = () => {
                       value={formData.name}
                       onChange={handleChange}
                       required
+                      disabled={isSubmitting}
                     />
                   </div>
                   <div className="form-group">
@@ -107,6 +148,7 @@ const Contact = () => {
                       value={formData.email}
                       onChange={handleChange}
                       required
+                      disabled={isSubmitting}
                     />
                   </div>
                 </div>
@@ -120,6 +162,7 @@ const Contact = () => {
                       name="company"
                       value={formData.company}
                       onChange={handleChange}
+                      disabled={isSubmitting}
                     />
                   </div>
                   <div className="form-group">
@@ -130,6 +173,7 @@ const Contact = () => {
                       name="phone"
                       value={formData.phone}
                       onChange={handleChange}
+                      disabled={isSubmitting}
                     />
                   </div>
                 </div>
@@ -143,11 +187,36 @@ const Contact = () => {
                     value={formData.message}
                     onChange={handleChange}
                     required
+                    disabled={isSubmitting}
                   ></textarea>
                 </div>
 
-                <button type="submit" className="btn btn-primary">
-                  Send Message
+                {/* Status Messages */}
+                {submitStatus === 'success' && (
+                  <div className="alert alert-success">
+                    <strong>Thank you!</strong> Your message has been sent successfully. We will get back to you soon.
+                  </div>
+                )}
+                
+                {submitStatus === 'error' && (
+                  <div className="alert alert-error">
+                    <strong>Error:</strong> There was a problem sending your message. Please try again or contact us directly at support@zipcodexpress.com.
+                  </div>
+                )}
+
+                <button 
+                  type="submit" 
+                  className={`btn btn-primary ${isSubmitting ? 'btn-loading' : ''}`}
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? (
+                    <>
+                      <span className="spinner"></span>
+                      Sending...
+                    </>
+                  ) : (
+                    'Send Message'
+                  )}
                 </button>
               </form>
             </div>

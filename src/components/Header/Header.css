@@ -276,10 +276,6 @@
 
 /* Tablet and Mobile Navigation */
 @media (max-width: 767px) {
-  .header__nav {
-    display: none;
-  }
-  
   .header__actions {
     display: none;
   }
@@ -301,15 +297,19 @@
     top: 70px;
     left: 0;
     right: 0;
+    height: calc(100vh - 70px);
     background: white;
     border-bottom: 1px solid var(--border-color);
     box-shadow: var(--shadow-lg);
     transform: translateX(-100%);
     transition: transform 0.3s ease;
+    z-index: 1000;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
   }
   
   .header__nav--open {
-    display: block;
     transform: translateX(0);
   }
   
@@ -318,6 +318,8 @@
     align-items: stretch;
     gap: 0;
     padding: var(--spacing-md);
+    margin-bottom: 0;
+    flex: 1;
   }
   
   .header__nav-item {
@@ -331,6 +333,9 @@
   .header__nav-link {
     padding: var(--spacing-md);
     justify-content: space-between;
+    display: flex;
+    align-items: center;
+    width: 100%;
   }
   
   .header__dropdown {
@@ -349,20 +354,55 @@
     display: block;
   }
   
-  .header__contact {
+  /* Mobile nav contact and CTA - Always visible at bottom */
+  .header__nav .header__contact {
     padding: var(--spacing-md);
-    border-top: 1px solid var(--border-color);
+    border-top: 2px solid var(--border-color);
+    display: block;
+    background-color: #f8f9fa;
+    margin-top: auto;
+    flex-shrink: 0;
   }
   
-  .header__cta {
-    padding: var(--spacing-md);
-    flex-direction: column;
+  .header__nav .header__contact-link {
+    display: flex;
+    align-items: center;
     gap: var(--spacing-sm);
+    color: var(--text-primary);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 1.1rem;
   }
   
-  .header__login,
-  .header__quote {
+  .header__nav .header__cta {
+    padding: var(--spacing-md);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+    background-color: #f8f9fa;
+    border-top: 1px solid var(--border-color);
+    flex-shrink: 0;
+  }
+  
+  .header__nav .header__login,
+  .header__nav .header__quote {
     width: 100%;
     text-align: center;
+    padding: 12px var(--spacing-md);
+    border-radius: var(--radius-md);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    display: inline-block;
+    border: 2px solid;
+  }
+}
+
+/* Hide mobile nav actions on desktop */
+@media (min-width: 768px) {
+  .header__nav .header__contact,
+  .header__nav .header__cta {
+    display: none !important;
   }
 }

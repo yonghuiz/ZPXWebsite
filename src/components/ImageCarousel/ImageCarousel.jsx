@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Link } from 'react-router-dom';
 import headpic1 from '../../assets/headpic1.png';
 import headpic2 from '../../assets/headpic2.png';
 import ziplocker3 from '../../assets/Ziplocker-3.jpg';
@@ -27,8 +28,8 @@ const ImageCarousel = () => {
       title: 'SMART TECHNOLOGY',
       subtitle: 'QR code and mobile app access',
       description: 'Scan QR codes or use our mobile app for instant package retrieval',
-      buttonText: 'Learn More',
-      buttonLink: '/technology'
+      buttonText: null,
+      buttonLink: null
     },
     {
       id: 3,
@@ -37,8 +38,8 @@ const ImageCarousel = () => {
       title: 'SECURE & CONVENIENT',
       subtitle: '24/7 PACKAGE ACCESS',
       description: 'Access your packages anytime with our secure smart locker system',
-      buttonText: 'See Solutions',
-      buttonLink: '/markets'
+      buttonText: null,
+      buttonLink: null
     }
   ];
 
@@ -120,12 +121,14 @@ const ImageCarousel = () => {
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ delay: 0.9, duration: 0.6 }}
               >
-                <a
-                  href={slides[currentSlide].buttonLink}
-                  className="btn btn-primary carousel-btn"
-                >
-                  {slides[currentSlide].buttonText}
-                </a>
+                {slides[currentSlide].buttonText && slides[currentSlide].buttonLink && (
+                  <Link
+                    to={slides[currentSlide].buttonLink}
+                    className="btn btn-primary carousel-btn"
+                  >
+                    {slides[currentSlide].buttonText}
+                  </Link>
+                )}
               </motion.div>
             </div>
           </motion.div>

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { sendRegistrationEmail } from '../../utils/emailService';
+import { sendRegistrationEmail } from '../../utils/emailService.js';
 import './Register.css';
 
 const Register = () => {
@@ -8,7 +8,6 @@ const Register = () => {
     phone: '',
     email: '',
     city: '',
-    state: '',
     address: '',
     apartmentUnits: '',
     installationDate: '',
@@ -17,6 +16,7 @@ const Register = () => {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState(null);
+  const [errorMessage, setErrorMessage] = useState('');
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -30,10 +30,11 @@ const Register = () => {
     e.preventDefault();
     setIsSubmitting(true);
     setSubmitStatus(null);
+    setErrorMessage('');
 
     try {
       // Send email using the email service utility
-      await sendRegistrationEmail(formData);
+      const result = await sendRegistrationEmail(formData);
       
       setSubmitStatus('success');
       
@@ -44,18 +45,26 @@ const Register = () => {
           phone: '',
           email: '',
           city: '',
-          state: '',
           address: '',
           apartmentUnits: '',
           installationDate: '',
           comments: ''
         });
         setSubmitStatus(null);
-      }, 3000);
+      }, 5000); // Increased to 5 seconds to let user read the message
 
     } catch (error) {
       console.error('Registration email failed:', error);
       setSubmitStatus('error');
+      
+      // Check if it's the SSL/network error with EmailJS
+      if (error.message && error.message.includes('Failed to fetch')) {
+        setErrorMessage('Network connection issue with email service. Your information has been recorded. Please also send your details to support@zipcodexpress.com to ensure we receive your request.');
+      } else if (error.message && error.message.includes('Network connection error')) {
+        setErrorMessage('Network temporarily unavailable. Please try submitting again, or copy your information below and contact us at support@zipcodexpress.com.');
+      } else {
+        setErrorMessage('Email service issue detected. Please copy your information below and send it to support@zipcodexpress.com for immediate assistance.');
+      }
     } finally {
       setIsSubmitting(false);
     }
@@ -211,13 +220,40 @@ const Register = () => {
 
                 {submitStatus === 'success' && (
                   <div className="form-message form-message--success">
-                    Thank you! Your registration request has been submitted. We will contact you soon.
+                    Thank you! Your registration request has been successfully sent to us. We will contact you soon to discuss your locker requirements.
                   </div>
                 )}
 
                 {submitStatus === 'error' && (
                   <div className="form-message form-message--error">
-                    There was an error submitting your request. Please try again.
+                    <strong>Email service temporarily unavailable.</strong>
+                    <br />
+                    {errorMessage}
+                    <br /><br />
+                    <strong>Please copy the information below and email it to support@zipcodexpress.com:</strong>
+                    <div style={{ 
+                      background: '#f5f5f5', 
+                      padding: '15px', 
+                      margin: '10px 0', 
+                      border: '1px solid #ddd',
+                      borderRadius: '5px',
+                      fontSize: '14px',
+                      fontFamily: 'monospace'
+                    }}>
+                      <strong>Quote Request Details:</strong><br />
+                      Name: {formData.name}<br />
+                      Phone: {formData.phone}<br />
+                      Email: {formData.email}<br />
+                      City: {formData.city}<br />
+                      Address: {formData.address}<br />
+                      Apartment Units: {formData.apartmentUnits}<br />
+                      Installation Date: {formData.installationDate || 'Not specified'}<br />
+                      Comments: {formData.comments || 'None'}<br />
+                    </div>
+                    <p>
+                      <strong>Or call us directly:</strong> (555) 123-4567<br />
+                      <strong>Email:</strong> support@zipcodexpress.com
+                    </p>
                   </div>
                 )}
 
@@ -226,7 +262,7 @@ const Register = () => {
                   disabled={isSubmitting}
                   className={`form-submit ${isSubmitting ? 'form-submit--loading' : ''}`}
                 >
-                  {isSubmitting ? 'Submitting...' : 'Submit'}
+                  {isSubmitting ? 'Sending Registration...' : 'Submit Registration'}
                 </button>
               </form>
             </div>

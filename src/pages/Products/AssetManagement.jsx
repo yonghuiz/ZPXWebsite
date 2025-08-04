@@ -24,6 +24,15 @@ const AssetManagement = () => {
             </p>
           </div>
 
+          {/* Product Image */}
+          <div className="product-image-section">
+            <img 
+              src="/images/Toolspic4.png" 
+              alt="Asset Management Tools" 
+              className="product-feature-image"
+            />
+          </div>
+
           <div className="product-features">
             <h2>Key Features</h2>
             <div className="features-grid">

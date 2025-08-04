@@ -43,21 +43,15 @@ const PackageLocker = () => {
     { feature: 'Direct Distributor', others: 'No', ours: 'Yes' },
     { feature: 'Locker Customization', others: 'No', ours: 'Yes, both hardware and software' },
     { feature: 'Pricing', others: '$$$', ours: '$' },
-    { feature: 'Mobile App', others: 'Most no', ours: 'Yes' },
-    { feature: 'App Advertising/Messaging', others: 'No', ours: 'Yes' },
     { feature: 'Voice Instruction', others: 'No', ours: 'Yes' },
-    { feature: 'IC Card Scanner', others: 'No', ours: 'Yes' },
-    { feature: 'Locker Opening Size', others: '3 or 5 size choices', ours: '6 sizes including S, M, L, XL, XXL, Oversize' },
+     { feature: 'Locker Opening Size', others: '3 or 5 size choices', ours: '6 sizes including S, M, L, XL, XXL, Oversize' },
     { feature: 'Package Pickup', others: 'Input pickup code', ours: 'Use App to scan QR code or input pickup code' },
     { feature: 'Notification', others: 'Email, some support text message', ours: '3-way notification via App, text, and email' },
-    { feature: 'Customer Service', others: 'Remote', ours: '24/7' },
     { feature: 'Backstage Management System', others: 'Most no', ours: 'Yes' },
     { feature: 'Programs', others: 'Purchase', ours: 'Purchase, Lease, tenant pay participation' },
-    { feature: 'Mail-out Option', others: 'Most no', ours: 'Yes' },
-    { feature: 'Shipment Charge', others: '$$$', ours: 'Actual 3rd party shipment invoice' },
-    { feature: 'All Weather Capability', others: 'No', ours: 'Yes' },
+   { feature: 'Shipment/Installation Charge', others: '$$$', ours: '$' },
     { feature: 'Custom Wrap', others: 'Most no', ours: 'Yes' },
-    { feature: 'Refrigerated lockers', others: 'Most no', ours: 'Yes' }
+   
   ];
 
   return (
@@ -159,16 +153,19 @@ const PackageLocker = () => {
             transition={{ duration: 0.6 }}
             viewport={{ once: true }}
           >
-            <a 
-              href="https://unibox-us.oss-us-east-1.aliyuncs.com/androidapp/zipcodexpress.apk" 
-              className="app-download__button"
-              target="_blank" 
-              rel="noopener noreferrer"
-            >
-              Please click to download
-            </a>
-            <p className="app-download__subtitle">Click above install android App</p>
+        
           </motion.div>
+        </div>
+      </section>
+
+      {/* App Image Section */}
+      <section className="app-image-section">
+        <div className="app-image-section__container">
+          <img 
+            src="/images/ZpxApp_a-514x1024.png" 
+            alt="ZipcodeXpress Mobile App" 
+            className="app-showcase-image"
+          />
         </div>
       </section>
 

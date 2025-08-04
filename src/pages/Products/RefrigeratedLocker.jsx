@@ -4,7 +4,7 @@ import './ProductPage.css';
 const RefrigeratedLocker = () => {
   return (
     <div className="product-page">
-      <section className="product-hero">
+      <section className="product-hero product-hero--refrigerated">
         <div className="product-hero__container">
           <h1 className="product-hero__title">Refrigerated Locker</h1>
           <p className="product-hero__subtitle">
@@ -22,6 +22,14 @@ const RefrigeratedLocker = () => {
               for perishable items, pharmaceuticals, groceries, and other temperature-sensitive 
               deliveries. Ensure product integrity from delivery to pickup.
             </p>
+          </div>
+
+          <div className="product-image-section">
+            <img 
+              src="/images/frig1.jpg" 
+              alt="Refrigerated Locker System" 
+              className="product-image"
+            />
           </div>
 
           <div className="product-features">
@@ -64,6 +72,14 @@ const RefrigeratedLocker = () => {
                 </ul>
               </div>
             </div>
+          </div>
+
+          <div className="product-image-section">
+            <img 
+              src="/images/Frig2.gif" 
+              alt="Refrigerated Locker Operation" 
+              className="product-image"
+            />
           </div>
 
           <div className="product-tech">

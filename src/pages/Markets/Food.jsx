@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import './MarketPage.css';
 
 const Food = () => {
@@ -143,7 +144,7 @@ const Food = () => {
             <h2>Ready to Transform Your Food Delivery Experience?</h2>
             <p>Contact us today to learn more about our smart locker solutions for food services.</p>
             <div className="food-cta-buttons">
-              <a href="/register" className="btn btn-primary">Request Quote</a>
+              <Link to="/register" className="btn btn-primary">Request Quote</Link>
               <a href="/contact-us" className="btn btn-outline">Contact Sales</a>
             </div>
           </div>

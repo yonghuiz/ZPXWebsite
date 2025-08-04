@@ -476,3 +476,47 @@
     gap: var(--spacing-xl);
   }
 }
+
+/* App Image Section */
+.app-image-section {
+  padding: 60px 0;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  text-align: center;
+}
+
+.app-image-section__container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--spacing-md);
+}
+
+.app-showcase-image {
+  max-width: 350px;
+  height: auto;
+  margin: 0 auto;
+  display: block;
+  border-radius: 20px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  border: 4px solid #fff;
+  transition: transform 0.3s ease;
+}
+
+.app-showcase-image:hover {
+  transform: scale(1.05);
+}
+
+@media (max-width: 768px) {
+  .app-image-section {
+    padding: 50px 0;
+  }
+  
+  .app-showcase-image {
+    max-width: 280px;
+  }
+}
+
+@media (max-width: 480px) {
+  .app-showcase-image {
+    max-width: 220px;
+  }
+}

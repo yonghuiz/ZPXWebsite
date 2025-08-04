@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Test</title>
+</head>
+<body>
+    <h1>Email System Test</h1>
+    <p>If you can see this text, the page is loading correctly.</p>
+    
+    <button onclick="testServer()">Test Server Connection</button>
+    
+    <div id="result" style="margin-top: 20px; padding: 10px; border: 1px solid #ccc;"></div>
+
+    <script>
+        console.log('Email test page loaded');
+        
+        function testServer() {
+            console.log('Testing server...');
+            document.getElementById('result').innerHTML = 'Testing server connection...';
+            
+            fetch('http://localhost:3001/api/health')
+                .then(response => {
+                    console.log('Response received:', response);
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Data:', data);
+                    document.getElementById('result').innerHTML = 'Server response: ' + JSON.stringify(data);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    document.getElementById('result').innerHTML = 'Error: ' + error.message;
+                });
+        }
+    </script>
+</body>
+</html>
