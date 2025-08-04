@@ -15,6 +15,7 @@ import TakeoutLocker from './pages/Products/TakeoutLocker/TakeoutLocker'
 import RefrigeratedLocker from './pages/Products/RefrigeratedLocker'
 import AssetManagement from './pages/Products/AssetManagement'
 import About from './pages/About/About'
+import Gallery from './pages/Gallery/Gallery'
 import Contact from './pages/Contact/Contact'
 import FAQ from './pages/FAQ/FAQ'
 import Register from './pages/Register/Register'
@@ -39,6 +40,7 @@ function App() {
           <Route path="/products/refrigerated-locker" element={<RefrigeratedLocker />} />
           <Route path="/products/asset-management" element={<AssetManagement />} />
           <Route path="/about" element={<About />} />
+          <Route path="/gallery" element={<Gallery />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/faq" element={<FAQ />} />
           <Route path="/register" element={<Register />} />

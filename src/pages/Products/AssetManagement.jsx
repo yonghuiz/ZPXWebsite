@@ -97,6 +97,52 @@ const AssetManagement = () => {
             </div>
           </div>
 
+          <div className="product-case-study">
+            <h2>Case Study</h2>
+            <div className="case-study-content">
+              <div className="case-study-image">
+                <img 
+                  src="/images/UWlocker2.jpg" 
+                  alt="University of Washington Asset Management Locker Installation" 
+                  className="case-study-img"
+                />
+              </div>
+              <div className="case-study-description">
+                <h3>University of Washington - Seattle</h3>
+                <h4>Student Journalism Equipment Management</h4>
+                <p>
+                  The University of Washington's School of Communications in Seattle has successfully 
+                  implemented our advanced asset management locker system to revolutionize their 
+                  equipment rental process for student journalists. This innovative solution enables 
+                  students to access professional photography and videography equipment 24/7, including 
+                  cameras, lenses, tripods, lighting equipment, and audio recording devices.
+                </p>
+                <p>
+                  The automated system tracks equipment utilization patterns, monitors device condition, 
+                  and provides real-time availability updates. Students can reserve equipment through 
+                  the integrated booking system, receive automated check-in/check-out confirmations, 
+                  and access detailed usage analytics. This implementation has reduced equipment loss 
+                  by 85%, improved accountability, and increased equipment availability for students 
+                  by enabling 24/7 access to critical journalism tools.
+                </p>
+                <div className="case-study-highlights">
+                  <div className="highlight-item">
+                    <strong>85%</strong>
+                    <span>Reduction in equipment loss</span>
+                  </div>
+                  <div className="highlight-item">
+                    <strong>24/7</strong>
+                    <span>Equipment accessibility</span>
+                  </div>
+                  <div className="highlight-item">
+                    <strong>100%</strong>
+                    <span>Usage tracking accuracy</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
           <div className="product-cta">
             <h2>Take Control of Your Assets</h2>
             <p>

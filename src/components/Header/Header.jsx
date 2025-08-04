@@ -50,6 +50,7 @@ const Header = () => {
       label: 'About Us',
       href: '/about',
       dropdown: [
+        { label: 'Gallery', href: '/gallery' },
         { label: 'Contact Us', href: '/contact' },
         { label: 'FAQ', href: '/faq' }
       ]
