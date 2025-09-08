@@ -1,0 +1,120 @@
+
+/* Style the tab */
+.tab {
+    overflow: hidden;
+    border: 1px solid #ccc;
+    background-color: #f1f1f1;
+}
+
+/* Style the buttons inside the tab */
+.tab button {
+    background-color: inherit;
+    float: left;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 14px 16px;
+    transition: 0.3s;
+    font-size: 17px;
+}
+
+/* Change background color of buttons on hover */
+.tab button:hover {
+    background-color: #ddd;
+}
+
+/* Create an active/current tablink class */
+.tab button.active {
+    background-color: #ccc;
+}
+
+/* Style the tab content */
+.tabcontent {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-top: none;
+    min-height: 200px;
+    background: #F6F6F6;
+}
+
+
+
+.title{
+    border-bottom: skyblue 1px solid;
+    margin-bottom: 0;
+    margin-top: 10px;
+    /* background: #F6F6F6; */
+}
+
+.democode{
+    /* background: #F6F6F6; */
+    border: none !important;
+    margin: 0px;
+    width: auto;
+    overflow: auto;
+    max-height: auto;
+}
+
+.apiUrl{
+    -webkit-border-radius: 4;
+    -moz-border-radius: 4;
+    border-radius: 4px;
+    color: #ffffff;
+    font-size: 16px;
+    /* background: #3498db; */
+    background: #292b36;
+    padding:10px 20px 10px 20px;
+    text-decoration: none;
+    margin: 5px 0;
+}
+.httpMethod{
+    -webkit-border-radius: 4;
+    -moz-border-radius: 4;
+    border-radius: 4px;
+    color: #ffffff;
+    font-size: 12px;
+    /* font-weight: bold; */
+    background: green;
+    padding:5px;
+    margin-right: 5px;
+    text-decoration: none;
+
+}
+
+
+/* param table */
+table.paramTb {
+    width: 100%;
+    text-align: left;
+    border-collapse: collapse;
+  }
+  table.paramTb td, table.paramTb th {
+    border: 1px solid #D1D1D1;
+    padding: 5px 4px;
+  }
+  table.paramTb tbody td {
+    font-size: 13px;
+    color: #000000;
+  }
+  table.paramTb thead {
+    background: #EDEDED;
+    background: -moz-linear-gradient(top, #f1f1f1 0%, #eeeeee 66%, #EDEDED 100%);
+    background: -webkit-linear-gradient(top, #f1f1f1 0%, #eeeeee 66%, #EDEDED 100%);
+    background: linear-gradient(to bottom, #f1f1f1 0%, #eeeeee 66%, #EDEDED 100%);
+  }
+  table.paramTb thead th {
+    font-size: 15px;
+    font-weight: normal;
+    color: #000000;
+    text-align: left;
+  }
+  table.paramTb tfoot td {
+    font-size: 14px;
+  }
+
+
+
+
+
+
+

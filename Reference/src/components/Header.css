@@ -1,0 +1,78 @@
+.myheader{
+    background-color: white;
+    padding-top:10px;
+    min-height: 70px;
+    border-bottom: rgb(247, 246, 246) 3px solid;
+}
+.myheader a{
+    color:rgb(15, 15, 15);
+    text-decoration: none;
+    /* text-transform: uppercase; */
+    font-size:16px;
+}
+.myheader ul{
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+}
+.myheader li{
+    float: left;
+    display: inline;
+    padding: 0 20px 0 20px;
+}
+.myheader #branding{
+    float: left;
+   
+}
+.myheader #branding img{
+    height: 60px;
+    width:254px;
+    margin-top: 5px;
+}
+.myheader #branding h1{
+    margin: 0;
+    font-size: 30px;
+    font-weight: bold;
+}
+.myheader nav{
+    float: right;
+    margin-top: 15px;
+}
+
+.myheader .highlight, .myheader .current a{
+    color:orangered;
+    text-decoration: none;
+}
+.myheader .noselect{
+    color:white;
+}
+.myheader a:hover{
+    color:orangered;
+}
+
+
+@media(max-width:768px){
+    header #branding,
+    header nav,
+    /* header nav li, */
+    #boxes .box
+    {
+        float:none;
+        text-align: center;
+        width:100%;
+        margin: auto;
+    }
+    header{
+        padding-bottom: 20px;
+    }
+    header nav li{
+
+    }
+    .mycontainer{
+        width:95%;
+    }
+    header nav li .home{
+        display: none;
+    }
+    
+}

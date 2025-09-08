@@ -1,0 +1,62 @@
+/* Pricing.css - Basic styling for pricing and user agreement pages */
+
+.pricing-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 50px 20px;
+}
+
+.pricing-header {
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+.pricing-header h1 {
+  font-size: 48px;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.pricing-header p {
+  font-size: 18px;
+  color: #666;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.user-agreement {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 40px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.user-agreement h1 {
+  color: #333;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.user-agreement h2 {
+  color: #444;
+  margin-top: 30px;
+  margin-bottom: 15px;
+}
+
+.user-agreement p {
+  line-height: 1.6;
+  color: #666;
+  margin-bottom: 15px;
+}
+
+.user-agreement ul {
+  margin-left: 20px;
+  margin-bottom: 20px;
+}
+
+.user-agreement li {
+  color: #666;
+  margin-bottom: 8px;
+}

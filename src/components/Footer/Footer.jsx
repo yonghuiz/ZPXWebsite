@@ -7,31 +7,31 @@ const Footer = () => {
 
   const footerSections = [
     {
-      title: 'Solutions',
+      title: 'Markets',
       links: [
-        { label: 'Apartments & Condos', href: '#apartment' },
-        { label: 'Office Buildings', href: '#office' },
-        { label: 'School Campus', href: '#school' },
-        { label: 'Food Service', href: '#foodservice' }
+        { label: 'Apartments & Condos', href: '/markets/apartment' },
+        { label: 'Office Buildings', href: '/markets/office' },
+        { label: 'Asset Management', href: '/markets/asset-management' },
+        { label: 'School Campus', href: '/markets/school' },
+        { label: 'Food Service', href: '/markets/foodservice' },
+        { label: 'eCommerce', href: '/markets/ecommerce' }
       ]
     },
     {
       title: 'Products',
       links: [
-        { label: 'Package Lockers', href: '#package-lockers' },
-        { label: 'Refrigerated Lockers', href: '#refrigerated' },
-        { label: 'Asset Management', href: '#asset-management' },
-        { label: 'Takeout Lockers', href: '#takeout' }
+        { label: 'Package Lockers', href: '/products/package-locker' },
+        { label: 'Refrigerated Lockers', href: '/products/refrigerated-locker' },
+        { label: 'Asset Management', href: '/products/asset-management' },
+        { label: 'Takeout Lockers', href: '/products/takeout-locker' }
       ]
     },
     {
       title: 'Company',
       links: [
-        { label: 'About Us', href: '#about' },
-        { label: 'Leadership', href: '#leadership' },
-        { label: 'Contact Us', href: '#contact' },
-        { label: 'Partnership', href: '#partnership' },
-        { label: 'FAQ', href: '#faq' }
+        { label: 'Gallery', href: '/gallery' },
+        { label: 'Contact Us', href: '/contact' },
+        { label: 'FAQ', href: '/faq' }
       ]
     },
     {
@@ -94,14 +94,14 @@ const Footer = () => {
         <div className="footer__apps">
           <h4 className="footer__apps-title">Download Our App "ZipcodeXpress"</h4>
           <div className="footer__app-buttons">
-            <a href="#ios-app" className="footer__app-button">
+            <a href="https://apps.apple.com/us/app/zipcodexpress/id1320712564" className="footer__app-button">
               <FaAppStore className="footer__app-icon" />
               <div className="footer__app-text">
                 <span className="footer__app-subtitle">Download on the</span>
                 <span className="footer__app-title">App Store</span>
               </div>
             </a>
-            <a href="#android-app" className="footer__app-button">
+            <a href="https://play.google.com/store/apps/details?id=com.zipcodexpress1&pcampaignid=web_share" className="footer__app-button">
               <FaGooglePlay className="footer__app-icon" />
               <div className="footer__app-text">
                 <span className="footer__app-subtitle">Get it on</span>
@@ -113,16 +113,13 @@ const Footer = () => {
 
         <div className="footer__bottom">
           <div className="footer__social">
-            <a href="#facebook" className="footer__social-link" aria-label="Facebook">
+            <a href="https://www.facebook.com/ZipcodeXpress/" className="footer__social-link" aria-label="Facebook">
               <FaFacebook />
             </a>
-            <a href="#twitter" className="footer__social-link" aria-label="Twitter">
-              <FaTwitter />
-            </a>
-            <a href="#linkedin" className="footer__social-link" aria-label="LinkedIn">
+            <a href="https://www.linkedin.com/company/zipcodexpress/" className="footer__social-link" aria-label="LinkedIn">
               <FaLinkedin />
             </a>
-            <a href="#instagram" className="footer__social-link" aria-label="Instagram">
+            <a href="https://www.instagram.com/zipcodexpress/" className="footer__social-link" aria-label="Instagram">
               <FaInstagram />
             </a>
           </div>

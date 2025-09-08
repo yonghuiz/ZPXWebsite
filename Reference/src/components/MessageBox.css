@@ -1,0 +1,17 @@
+.modal-error-ico{
+    color:red;
+    font-size: 22px;
+    padding: 0 10px;
+
+}
+.modal-info-ico{
+    color:skyblue;
+    font-size: 22px;
+    padding: 0 10px;
+}
+
+.modal-success-ico{
+    color:green;
+    font-size: 22px;
+    padding: 0 10px;
+}

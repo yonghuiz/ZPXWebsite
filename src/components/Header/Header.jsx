@@ -130,13 +130,13 @@ const Header = () => {
           </div>
           
           <div className="header__cta">
-            <a 
-              href="https://account.zipcodexpress.com/" 
+            <Link 
+              to="/account" 
               className="btn btn-outline header__login"
               onClick={() => setIsMenuOpen(false)}
             >
               Login
-            </a>
+            </Link>
             <Link 
               to="/register" 
               className="btn btn-primary header__quote"
@@ -155,9 +155,9 @@ const Header = () => {
             </a>
           </div>
           <div className="header__cta">
-            <a href="https://account.zipcodexpress.com/" className="btn btn-outline header__login">
+            <Link to="/account" className="btn btn-outline header__login">
               Login
-            </a>
+            </Link>
             <Link to="/register" className="btn btn-primary header__quote">
               Request Quote
             </Link>

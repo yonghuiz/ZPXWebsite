@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Document</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" 
+	>
+
+
+	<style>
+			#my-shopping-card{
+				color:green;
+				width: 40px;
+			}
+		#my-shopping-card span[data-count]::after {
+			position: absolute;
+			right: 15%;
+			top: 20%;
+			content: attr(data-count);
+			font-size: 40%;
+			padding: .2em;
+			border-radius: 50%;
+			line-height: 1em;
+			color: white;
+			background: rgba(255, 0, 0, .85);
+			text-align: center;
+			min-width: 1em;
+			font-weight: bold;
+		}
+
+		.right{
+			float:right;
+			padding-left: 10px;
+		}
+
+		.left{
+			float:left;
+			padding-left: 10px;
+		}
+		
+
+
+
+	</style>
+</head>
+
+<body>
+	<header>
+	<div class="left">Logo</div>
+	<div class="left"><a href="#"> Stores</a></div>
+	<div class="left" style="min-width:200px"><input/></div>
+	<div class="right">
+	<div id="my-shopping-card" class="right" >
+			<span class="fa-stack " data-count="4">
+			<i class="fa fa-shopping-cart fa-stack-1x" ></i>
+			</span>
+		</div>
+	<div class="right"><a href="#"> Account</a></div>
+</div>
+
+	
+	
+	</header>
+
+	
+</body>
+
+</html>

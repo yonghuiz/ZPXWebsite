@@ -1,0 +1,58 @@
+.account-title{
+    font-size: 25px;
+    color:#35424a;
+    line-height:60px;
+ 
+    
+}
+
+.account-header{
+    margin: 0;
+    background-color: gainsboro;
+    padding: 0px 20px;
+    height: 50px;
+    position: relative;
+    z-index: 100;
+}
+.account-header .logout{
+    float: right;
+    border: none;
+    color: gray;
+    font-size: 16px;
+    cursor: pointer;
+    line-height:60px;
+}
+.account-header .menu{
+
+    cursor: pointer;
+    float: right;
+    display: none;
+
+}
+.account-header .logout:hover {
+    color: orangered;
+    text-decoration: none;
+}
+@media(max-width:768px){
+    .account-header{
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 1000;
+        margin-left: 0; /* No sidebar margin on mobile */
+    }
+    .main{
+        padding-top: 60px;
+        margin-left: 0; /* No sidebar margin on mobile */
+    }
+    .account-title{
+        font-size: 18px;
+    }
+    .account-header .logout{
+        display: none;
+    }
+    .account-header .menu{
+        display: block;
+    }
+}

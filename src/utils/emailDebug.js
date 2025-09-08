@@ -1,5 +1,5 @@
 // Quick debug utility to test SMTP configuration
-import { buildApiUrl } from '../config/api.js';
+import { buildApiUrl } from '../config/api.jsx';
 
 export const testSMTPConfig = () => {
   console.log('🔍 Debugging SMTP Configuration:');

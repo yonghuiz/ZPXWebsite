@@ -1,0 +1,226 @@
+/* Modern Layout Styles */
+.main {
+    margin-left: 250px; /* Match the sidebar width */
+    padding: 0;
+    min-height: 100vh;
+}
+
+.main-body{
+    padding: 20px;
+    margin-left: 10px;
+}
+
+/* Modern Dashboard Styles */
+.dashboard-container {
+    background: #f0f2f5;
+    min-height: 100vh;
+    margin-left: 250px; /* Account for sidebar width */
+}
+
+.dashboard-content {
+    margin-left: 0; /* Container already has the margin */
+    padding: 24px;
+}
+
+.welcome-section {
+    margin-bottom: 24px;
+}
+
+.welcome-card {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 12px;
+    border: none;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+.welcome-card .ant-card-body {
+    padding: 32px;
+}
+
+.welcome-content {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+}
+
+.welcome-avatar {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+}
+
+.welcome-text {
+    flex: 1;
+}
+
+.welcome-title {
+    color: white !important;
+    margin-bottom: 8px !important;
+    font-weight: 600;
+}
+
+.welcome-subtitle {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 16px;
+}
+
+.quick-actions-card {
+    border-radius: 12px;
+    border: none;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.quick-actions-card .ant-card-head-title {
+    font-weight: 600;
+}
+
+.status-cards {
+    margin-bottom: 24px;
+}
+
+.status-card {
+    border-radius: 12px;
+    border: none;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+}
+
+.status-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+.status-card .ant-statistic-title {
+    font-weight: 600;
+    color: #595959;
+}
+
+.profile-card,
+.packages-card,
+.apartments-card,
+.transactions-card {
+    border-radius: 12px;
+    border: none;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    margin-bottom: 24px;
+}
+
+.profile-card .ant-card-head-title,
+.packages-card .ant-card-head-title,
+.apartments-card .ant-card-head-title,
+.transactions-card .ant-card-head-title {
+    font-weight: 600;
+}
+
+.apartment-item {
+    border-radius: 8px;
+    border: 1px solid #f0f0f0;
+    transition: all 0.3s ease;
+}
+
+.apartment-item:hover {
+    border-color: #1890ff;
+    box-shadow: 0 4px 12px rgba(24, 144, 255, 0.1);
+}
+
+.ant-descriptions-item-label {
+    font-weight: 600;
+    color: #595959;
+}
+
+.ant-list-item {
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.ant-list-item:hover {
+    background: #fafafa;
+}
+
+.ant-card-head {
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.ant-card-head-title {
+    color: #262626;
+}
+
+/* Card title mobile responsive styles */
+.card-title-mobile {
+    width: 100%;
+}
+
+.card-actions-mobile {
+    display: none;
+    margin-top: 12px;
+    gap: 8px;
+}
+
+.card-actions-desktop {
+    display: flex;
+    gap: 8px;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+    .dashboard-content {
+        margin-left: 0;
+        padding: 16px;
+    }
+    
+    .welcome-content {
+        flex-direction: column;
+        text-align: center;
+        gap: 16px;
+    }
+    
+    .welcome-card .ant-card-body {
+        padding: 24px;
+    }
+    
+    .status-cards .ant-col {
+        margin-bottom: 16px;
+    }
+    
+    /* Hide desktop actions and show mobile actions */
+    .card-actions-desktop {
+        display: none;
+    }
+    
+    .card-actions-mobile {
+        display: flex;
+        flex-wrap: wrap;
+    }
+}
+
+@media (max-width: 576px) {
+    .dashboard-content {
+        padding: 12px;
+    }
+    
+    .welcome-card .ant-card-body {
+        padding: 16px;
+    }
+    
+    .welcome-title {
+        font-size: 20px !important;
+    }
+}
+
+/* Mobile responsive styles */
+@media (max-width: 768px) {
+    .main {
+        margin-left: 0;
+        padding-top: 60px;
+    }
+    
+    .dashboard-container {
+        margin-left: 0;
+        padding-top: 60px;
+    }
+    
+    .dashboard-content {
+        margin-left: 0;
+        padding: 16px;
+    }
+}

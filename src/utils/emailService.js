@@ -2,7 +2,7 @@
 // This can be configured to use different email services
 
 import emailjs from '@emailjs/browser';
-import { buildApiUrl, EMAIL_ENDPOINT, REGISTRATION_ENDPOINT } from '../config/api';
+import { buildApiUrl, EMAIL_ENDPOINT, REGISTRATION_ENDPOINT } from '../config/api.jsx';
 import sendEmailViaSimpleForm from './emailService-simple.js';
 
 // Initialize EmailJS (call this in your main.jsx or App.jsx)

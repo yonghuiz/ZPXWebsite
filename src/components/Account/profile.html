@@ -1,0 +1,63 @@
+<link href="css/unibox_user.css" rel="stylesheet" media="screen"> 
+<nav class="navbar navbar-fixed-top uni-user-navtop navbar-default" role="navigation">
+
+		    <!-- Brand and toggle get grouped for better mobile display -->
+		    <div class="navbar-header">
+		        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+		            <span class="sr-only">Toggle navigation</span>
+		            <span class="icon-bar"></span>
+		            <span class="icon-bar"></span>
+		            <span class="icon-bar"></span>
+		        </button>
+		    </div>
+		    <!-- Top Menu Items -->
+		   
+		
+		   
+
+		   
+		    
+		    <ul  class="nav navbar-right top-nav collapse navbar-collapse navbar-ex1-collapse">
+		     	<li><a href="#/home">Home</a></li>
+				<li><a href="#/list?titleType=0&movieGenre=0&movieYear=0&orderType=0">Movies</a></li>
+				<li><a href="#/selectKiosk">kiosks</a></li>
+
+		    </ul>
+		    <!-- Sidebar Menu Items - These collapse to the responsive navigation menu on small screens -->
+		    <div class="collapse navbar-collapse navbar-ex1-collapse" >
+		        <ul class="nav navbar-nav side-nav">
+		        	<div class="admin-logo">
+		        		<a class="navbar-brand" href="#/home"><img src="img/logo-4.png"></a>
+		        	</div>
+		        	
+		        	<div class="user-ms">
+		        		<div class="user-name">
+		        			<div class="user-pic"><img src="img/face1.png"></div>
+		        			<div class="user-name-right">
+		        				<ul>
+		        					<li class="name">{{user.UserInfo.profile.firstName}}</li>
+		        					<li>{{user.UserInfo.member.email}}</li>
+		        			
+		        				</ul>
+		        			</div>
+		        		</div>
+		        	</div>
+		        	<ul class="uni-admin-nav">
+			        	<li ng-class="{active:path('admin_home')}"><a href="#/admin_home/:user"><i class="glyphicon glyphicon-user"></i>My Account</a></li>
+			        	<li ng-class="{active:path('admin_grade')}"><a href="#/admin_grade/:user"><i class="glyphicon glyphicon-upload"></i>Membership Plan</a></li>
+			        	<li ng-class="{active:path('admin_statement')}"><a href="#/admin_statement/:user"><i class="glyphicon glyphicon-duplicate"></i>Statement</a></li>
+			        	<li ng-class="{active:path('admin_transactions')}"><a href="#/admin_transactions/:user"><i class="glyphicon glyphicon-shopping-cart"></i>Transactions</a></li>
+			        	<li ng-class="{active:path('admin_wallet')}"><a href="#/admin_wallet/:user"><i class="glyphicon glyphicon-piggy-bank"></i>Wallet</a></li>
+		        	</ul>
+		        	
+		        	
+		   
+		        </ul>
+		          
+		    </div>
+		    <!-- /.navbar-collapse -->
+		    
+		 
+		</nav>
+		
+		
