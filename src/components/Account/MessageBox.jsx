@@ -3,6 +3,7 @@ import React from 'react';
 import { Button,  Modal, ModalHeader, ModalBody, ModalFooter,Progress  } from 'reactstrap';
 import './MessageBox.css'
 import {FormattedMessage} from 'react-intl';
+import { CloseCircleOutlined, InfoCircleOutlined, QuestionCircleOutlined, CheckCircleOutlined } from '@ant-design/icons';
 
 
 // Usage: openConfirmBox.call(this,title,content,onOK)
@@ -103,22 +104,22 @@ export function ModalBox(){
                 <ModalBody>
                     {
                         this.state[MODAL_TYPE] === MODAL_TYPE_ERROR?
-                        <span className='modal-error-ico'><i className="fa fa-times-circle"> </i></span>
+                        <span className='modal-error-ico'><CloseCircleOutlined /> </span>
                         :null
                     }
                      {
                         this.state[MODAL_TYPE] === MODAL_TYPE_INFO?
-                        <span className='modal-info-ico'><i className="fa fa-info-circle"> </i></span>
+                        <span className='modal-info-ico'><InfoCircleOutlined /> </span>
                         :null
                     }
                     {
                         this.state[MODAL_TYPE] === MODAL_TYPE_CONFIRM?
-                        <span className='modal-info-ico'><i className="fa fa-question-circle"> </i></span>
+                        <span className='modal-info-ico'><QuestionCircleOutlined /> </span>
                         :null
                     }
                     {
                         this.state[MODAL_TYPE] === MODAL_TYPE_SUCESS?
-                        <span className='modal-success-ico'><i className="fa fa-check-circle"> </i></span>
+                        <span className='modal-success-ico'><CheckCircleOutlined /> </span>
                         :null
                     }
                 

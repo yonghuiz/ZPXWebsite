@@ -9,6 +9,7 @@ import {
 } from '../../config/network'
 import Md5 from '../../config/md5.js'
 import {Button} from 'reactstrap'
+import { MessageOutlined, MailOutlined, LockOutlined } from '@ant-design/icons'
 import { showErrorMessage, showSuccessMessage, ModalBox, openSuccessBox } from './MessageBox';
 
 
@@ -36,6 +37,7 @@ class ForgotPassword extends Component {
          
     }
     sendVCode(event){
+        if (!this.canSendCode()) return;
         this.setState({ loading: true });
         post_data(LOGIN_FORGET_PSD, {email:this.state.email})
             .then((data) => {
@@ -105,7 +107,7 @@ class ForgotPassword extends Component {
         }).then(data=>{
             openSuccessBox.call(this,{
                 content:window.appLocale.messages['page.changepassword.submit.success']||'Reset password sucessfully.Please relogin.',
-                onOK:()=>{this.setState({redict:true,redictTo:'/login'});}
+                onOK:()=>{this.setState({redict:true,redictTo:'/account/login'});}
             })
             
         }).catch(error=>{
@@ -117,10 +119,17 @@ class ForgotPassword extends Component {
     }
     renderLine(name,placeholder,type,icon){
         let errName = name+'_err'
+        
+        // Map FontAwesome classes to Ant Design icons
+        let IconComponent;
+        if (icon === 'fa-envelope') IconComponent = MailOutlined;
+        else if (icon === 'fa-key') IconComponent = LockOutlined;
+        else IconComponent = MailOutlined; // fallback
+        
         return(
             <div>
             <div className="input-container">
-                <i className={'fa '+icon+' icon'}></i>
+                <IconComponent className="icon" />
                 <input className="input-field" type={type} placeholder={placeholder} name={name} onChange={this.handleChange} onBlur={()=>this.handleBlur(name)}/>
             </div>
             { 
@@ -131,6 +140,10 @@ class ForgotPassword extends Component {
             </div>
         )
     }
+    canSendCode(){
+       return this.state.email!==''
+    }
+
     canSubmit(){
        return this.state.email!==''
         &&this.state.vcode!==''
@@ -152,7 +165,7 @@ class ForgotPassword extends Component {
             return <Navigate to={this.state.redictTo} replace />;
           }
         return (
-            <div >
+           <div className="register-page">
                 <Header page='ForgotPassword' />
                 <div className='register-form'>
                     <form onSubmit={this.handleSubmit}>
@@ -160,14 +173,14 @@ class ForgotPassword extends Component {
                             <span className="form-title">
                             {window.appLocale.messages['page.login.forgotpassword']||'Forgot Password'}                       
                             </span >
-                            <Link className="right" to="/login"> {window.appLocale.messages['page.login']||'Login'}</Link>
+                            <Link className="right" to="/account/login"> {window.appLocale.messages['page.login']||'Login'}</Link>
                         </div>
                         
                         <hr/>
                         {this.renderLine('email',window.appLocale.messages['page.user.email']||'Phone Number','text','fa-envelope')}                       
 
                         <div className="input-container">
-                            <i className="fa fa-commenting icon"></i>
+                            <MessageOutlined className="icon" />
                             <input className="input-field" type="text" placeholder={window.appLocale.messages['page.user.vcode']||"Verifiation code"} name="vcode" onChange={this.handleChange} onBlur={()=>this.handleBlur('vcode')}/>
                             <button className="send-code-btn" onClick={this.sendVCode}>
                                 {/*{window.appLocale.messages['page.user.vcode.send']||'Send Code'}*/}

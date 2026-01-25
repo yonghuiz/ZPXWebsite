@@ -1,1 +1,2 @@
-/*    /index.html   200
+# Only redirect if file doesn't exist
+/*    /index.html   404!

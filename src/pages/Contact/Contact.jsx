@@ -33,23 +33,19 @@ const Contact = () => {
     try {
       console.log('Submitting contact form:', formData);
       
-      // Prepare data with subject field for EmailJS
+      // Prepare data with all fields for the email service
       const emailData = {
         name: formData.name,
         email: formData.email,
-        subject: formData.company ? `Contact from ${formData.company}` : 'Website Contact',
-        message: `
-Name: ${formData.name}
-Email: ${formData.email}
-Company: ${formData.company || 'Not specified'}
-Phone: ${formData.phone || 'Not specified'}
-
-Message:
-${formData.message}
-        `.trim()
+        company: formData.company,
+        phone: formData.phone,
+        message: formData.message,
+        subject: formData.company ? `Contact from ${formData.company}` : 'Website Contact'
       };
       
-      // Send email via EmailJS
+      console.log('Prepared emailData:', emailData);
+      
+      // Send email via local email server
       const result = await sendContactEmail(emailData);
       
       if (result.success) {

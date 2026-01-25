@@ -140,14 +140,14 @@ class Login extends Component {
 
                         <div className="login-footer">
                             <div className="login-footer-content">
-                                <Link to="/ForgotPassword" className="forgot-password-link">
+                                <Link to="/account/ForgotPassword" className="forgot-password-link">
                                     {window.appLocale.messages['page.login.forgotpassword'] || 'Forgot password?'}
                                 </Link>
                                 
                                 {import.meta.env.VITE_LOCATION !== 'CHINESE' && (
                                     <div className="register-link">
                                         <Text>Don't have an account? </Text>
-                                        <Link to="/register">
+                                        <Link to="/account/register">
                                             {window.appLocale.messages['page.login.register'] || 'Register here'}
                                         </Link>
                                     </div>

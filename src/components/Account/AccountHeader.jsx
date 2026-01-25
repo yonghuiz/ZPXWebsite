@@ -5,6 +5,7 @@ import { Navigate, } from 'react-router-dom'
 import { logout } from '../../config/network'
 import SideNav from './SideNav'
 import { FormattedMessage } from 'react-intl';
+import { MenuOutlined, LogoutOutlined } from '@ant-design/icons';
 
 
 
@@ -51,10 +52,10 @@ class AccountHeader extends Component {
                     onOverlayClick={this.handleOverlayClick}
                 />
                 <div className="account-header">
-                    <span className="account-title menu" onClick={this.handleMenu}><i className="fa fa-list"></i>  </span>
+                    <span className="account-title menu" onClick={this.handleMenu}><MenuOutlined />  </span>
                     <span className="account-title">{this.props.title}</span>
 
-                    <span className="logout" onClick={this.handleLogout}><i className="fa fa-sign-out"></i> <FormattedMessage id="page.logout" defaultMessage="Logout" /></span>
+                    <span className="logout" onClick={this.handleLogout}><LogoutOutlined /> <FormattedMessage id="page.logout" defaultMessage="Logout" /></span>
 
                 </div>
             </div>

@@ -199,7 +199,7 @@ class SideNav extends Component {
                             {
                                 key: 'logout',
                                 icon: <LogoutOutlined />,
-                                label: <Link to="/logout">
+                                label: <Link to="/account/logout">
                                     <FormattedMessage id="page.logout" defaultMessage="Logout" />
                                 </Link>,
                                 danger: true

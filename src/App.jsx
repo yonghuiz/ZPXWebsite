@@ -1,5 +1,6 @@
 import React from 'react'
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom'
+import { ConfigProvider, message, App as AntApp } from 'antd'
 import Header from './components/Header/Header'
 import Footer from './components/Footer/Footer'
 import Home from './pages/Home'
@@ -18,9 +19,10 @@ import About from './pages/About/About'
 import Gallery from './pages/Gallery/Gallery'
 import Contact from './pages/Contact/Contact'
 import FAQ from './pages/FAQ/FAQ'
-import Register from './pages/Register/Register'
+import Quote from './pages/Register/Quote'
 // Account-related imports
 import Login from './components/Account/Login'
+import Register from './components/Account/Register'
 import Account from './components/Account/Account'
 import Transactions from './components/Account/Transactions'
 import Profile from './components/Account/Profile'
@@ -58,17 +60,19 @@ function AppContent() {
         <Route path="/gallery" element={<Gallery />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/faq" element={<FAQ />} />
-        <Route path="/register" element={<Register />} />
+        <Route path="/register" element={<Quote />} />
         
         <Route path="/account" element={<Login />} />
         <Route path="/account/dashboard" element={<Account />} />
+        <Route path="/account/logout" element={<Logout />} />
+        <Route path="/account/login" element={<Login />} />
+        <Route path="/account/register" element={<Register />} />
         <Route path="/account/transactions" element={<Transactions />} />
         <Route path="/account/Profile" element={<Profile />} />
         <Route path="/account/changepassword" element={<ChangePassword />} />
         <Route path="/account/support" element={<Support />} />
         <Route path="/account/demo" element={<Demo />} />
-        <Route path="/ForgotPassword" element={<ForgotPassword />} />
-        <Route path="/logout" element={<Logout />} />
+        <Route path="/account/ForgotPassword" element={<ForgotPassword />} />
         <Route path="/UserAgreement" element={<UserAgreement />} />
        
       </Routes>
@@ -78,10 +82,21 @@ function AppContent() {
 }
 
 function App() {
+  // Configure message globally
+  message.config({
+    top: 100,
+    duration: 3,
+    maxCount: 3,
+  });
+
   return (
-    <Router>
-      <AppContent />
-    </Router>
+    <ConfigProvider>
+      <AntApp>
+        <Router>
+          <AppContent />
+        </Router>
+      </AntApp>
+    </ConfigProvider>
   )
 }
 

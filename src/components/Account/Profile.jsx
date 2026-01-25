@@ -19,14 +19,14 @@ import {
     Tag,
     Steps
 } from 'antd';
-import { 
-    CheckCircleOutlined, 
-    UserOutlined, 
-    PhoneOutlined, 
-    HomeOutlined, 
-    WarningOutlined, 
-    MailOutlined, 
-    LockOutlined, 
+import {
+    CheckCircleOutlined,
+    UserOutlined,
+    PhoneOutlined,
+    HomeOutlined,
+    WarningOutlined,
+    MailOutlined,
+    LockOutlined,
     SafetyCertificateOutlined,
     QuestionCircleOutlined,
     SaveOutlined
@@ -88,7 +88,7 @@ class Profile extends Component {
         // Only populate form if data is loaded and form ref is available
         if (this.state.dataLoaded && this.formRef.current) {
             console.log('Populating form with data:', this.state);
-            
+
             this.formRef.current.setFieldsValue({
                 phone: this.state.phone || '',
                 nickname: this.state.nickname || '',
@@ -101,7 +101,7 @@ class Profile extends Component {
                 zipcode: this.state.zipcode || '',
                 householdermember: this.state.householdermember || ''
             });
-            
+
             // Set selectedStateCode based on the loaded state
             if (this.state.state && this.state.statenames.length > 0) {
                 const stateOption = this.state.statenames.find(s => s.key === this.state.state);
@@ -119,15 +119,15 @@ class Profile extends Component {
         }
 
         let isemail = localStorage.getItem('isEmailVerified');
-        if (isemail === '1') { 
-            this.setState({ emailverified: true }) 
+        if (isemail === '1') {
+            this.setState({ emailverified: true })
         }
-        
+
         // Load profile data
         get_data_token(GET_MEMBER_INFO_URL, {})
             .then(data => {
                 console.log('Profile API response:', data); // Debug log
-                
+
                 this.setState({
                     memberId: data.member.memberId,
                     phone: data.member.phone,
@@ -148,7 +148,7 @@ class Profile extends Component {
                     // Populate form after state is updated
                     setTimeout(() => this.populateForm(), 100);
                 });
-                
+
                 console.log('Profile data loaded successfully');
             })
             .catch(err => {
@@ -164,7 +164,7 @@ class Profile extends Component {
             .then(data => {
                 console.log('States API response:', data); // Debug log
                 let stateOptions = [];
-                
+
                 if (data && data.states && Array.isArray(data.states)) {
                     stateOptions = data.states.map(state => ({
                         key: state.stateName,
@@ -187,7 +187,7 @@ class Profile extends Component {
                         // Add more states as needed
                     ];
                 }
-                
+
                 this.setState({ statenames: stateOptions }, () => {
                     // Try to populate form again now that states are loaded
                     if (this.state.dataLoaded) {
@@ -199,7 +199,7 @@ class Profile extends Component {
                 console.error('Get states error:', err);
                 showErrorMessage.call(this, 'Get states error: ' + err);
                 // Set fallback states even on error
-                this.setState({ 
+                this.setState({
                     statenames: [
                         { key: 'California', value: 'CA' },
                         { key: 'New York', value: 'NY' },
@@ -217,7 +217,7 @@ class Profile extends Component {
 
     componentDidUpdate(prevProps, prevState) {
         // If data just finished loading or form ref just became available, populate the form
-        if ((this.state.dataLoaded && !prevState.dataLoaded) || 
+        if ((this.state.dataLoaded && !prevState.dataLoaded) ||
             (this.formRef.current && !prevState.dataLoaded && this.state.dataLoaded)) {
             setTimeout(() => this.populateForm(), 100);
         }
@@ -226,13 +226,13 @@ class Profile extends Component {
     onFinish = (values) => {
         console.log('onFinish called with values:', values); // Debug log
         this.setState({ loading: true });
-        
+
         // Fix addressline2 format - API expects '**' for empty values
         let addressline2 = values.addressline2;
-        if (!addressline2 || addressline2.trim() === '') { 
-            addressline2 = '**'; 
+        if (!addressline2 || addressline2.trim() === '') {
+            addressline2 = '**';
         }
-        
+
         // Find the selected state code from statenames
         let stateCode = this.state.selectedStateCode;
         if (values.state && this.state.statenames.length > 0) {
@@ -241,7 +241,7 @@ class Profile extends Component {
                 stateCode = selectedState.value;
             }
         }
-        
+
         const profileData = {
             firstName: values.first_name,
             lastName: values.last_name,
@@ -275,13 +275,13 @@ class Profile extends Component {
 
     sendVCode = () => {
         this.setState({ loading1: true });
-        
+
         post_data(VCODE_SEND_URL, { email: this.state.email })
             .then((data) => {
-                this.setState({ 
+                this.setState({
                     loading1: false,
-                    vcode_got: data.vcode,
-                    visible: true 
+                    vcode_got: data.vid,
+                    visible: true
                 });
                 message.success('Verification code sent successfully!');
             })
@@ -292,24 +292,25 @@ class Profile extends Component {
     };
 
     onFinishEmailVerification = (values) => {
-        post_data_token(EMAIL_VERIFY_URL, { 
-            email: this.state.email, 
-            vcode: values.vcode 
+        post_data_token(EMAIL_VERIFY_URL, {
+            email: this.state.email,
+            vcode: values.vcode,
+            vid: this.state.vcode_got
         })
-        .then(data => {
-            this.setState({ 
-                emailverified: true, 
-                visible: false 
+            .then(data => {
+                this.setState({
+                    emailverified: true,
+                    visible: false
+                });
+                localStorage.setItem('isEmailVerified', '1');
+                message.success('Email verified successfully!');
+                if (this.formRef.current) {
+                    this.formRef.current.resetFields(['vcode']);
+                }
+            })
+            .catch(error => {
+                message.error('Verification failed: ' + error);
             });
-            localStorage.setItem('isEmailVerified', '1');
-            message.success('Email verified successfully!');
-            if (this.formRef.current) {
-                this.formRef.current.resetFields(['vcode']);
-            }
-        })
-        .catch(error => {
-            message.error('Verification failed: ' + error);
-        });
     };
 
     calculateProfileCompletion = () => {
@@ -323,7 +324,7 @@ class Profile extends Component {
             this.state.state,
             this.state.zipcode
         ];
-        
+
         const completedFields = fields.filter(field => field && field.trim() !== '').length;
         return Math.round((completedFields / fields.length) * 100);
     };
@@ -344,7 +345,7 @@ class Profile extends Component {
         return (
             <div className="profile-container">
                 <AccountHeader page={"Profile"} title="Profile Settings" />
-                
+
                 <div className="profile-content">
                     {/* Profile Header */}
                     <Card className="profile-header-card" variant="outlined">
@@ -392,8 +393,8 @@ class Profile extends Component {
                                     <Title level={4}>Quick Actions</Title>
                                     <div className="space-vertical" style={{ width: '100%' }}>
                                         {!isEmailVerified && (
-                                            <Button 
-                                                type="primary" 
+                                            <Button
+                                                type="primary"
                                                 icon={<MailOutlined />}
                                                 onClick={this.sendVCode}
                                                 loading={this.state.loading1}
@@ -416,18 +417,18 @@ class Profile extends Component {
                     {/* Profile Steps */}
                     <Card className="profile-steps-card" variant="outlined">
                         <Steps current={isEmailVerified ? 1 : 0} size="small">
-                            <Step 
-                                title="Verify Email" 
+                            <Step
+                                title="Verify Email"
                                 description="Verify your email address"
                                 icon={<MailOutlined />}
                             />
-                            <Step 
-                                title="Complete Profile" 
+                            <Step
+                                title="Complete Profile"
                                 description="Fill in your personal information"
                                 icon={<UserOutlined />}
                             />
-                            <Step 
-                                title="Setup Complete" 
+                            <Step
+                                title="Setup Complete"
                                 description="You're ready to use all features"
                                 icon={<CheckCircleOutlined />}
                             />
@@ -437,7 +438,7 @@ class Profile extends Component {
                     {/* Profile Form */}
                     <Row gutter={[24, 24]}>
                         <Col xs={24} lg={16}>
-                            <Card 
+                            <Card
                                 title={
                                     <div className="space-horizontal">
                                         <UserOutlined />
@@ -526,9 +527,9 @@ class Profile extends Component {
                                                     onChange={(value) => {
                                                         const selectedState = this.state.statenames.find(s => s.key === value);
                                                         if (selectedState) {
-                                                            this.setState({ 
+                                                            this.setState({
                                                                 selectedState: value,
-                                                                selectedStateCode: selectedState.value 
+                                                                selectedStateCode: selectedState.value
                                                             });
                                                         }
                                                     }}
@@ -560,9 +561,9 @@ class Profile extends Component {
 
                                     <Form.Item>
                                         <div className="space-horizontal">
-                                            <Button 
-                                                type="primary" 
-                                                htmlType="submit" 
+                                            <Button
+                                                type="primary"
+                                                htmlType="submit"
                                                 icon={<SaveOutlined />}
                                                 loading={this.state.loading}
                                                 size="large"
@@ -585,8 +586,8 @@ class Profile extends Component {
                         </Col>
 
                         <Col xs={24} lg={8}>
-                            <Card 
-                                title="Account Security" 
+                            <Card
+                                title="Account Security"
                                 className="security-card"
                             >
                                 <div className="space-vertical">
@@ -607,8 +608,8 @@ class Profile extends Component {
                                                     <CheckCircleOutlined /> Verified
                                                 </Tag>
                                             ) : (
-                                                <Button 
-                                                    size="small" 
+                                                <Button
+                                                    size="small"
                                                     type="primary"
                                                     onClick={this.sendVCode}
                                                     loading={this.state.loading1}
@@ -658,15 +659,15 @@ class Profile extends Component {
                                 <Text strong>{this.state.email}</Text>
                             </div>
                         </div>
-                        
+
                         <Form onFinish={this.onFinishEmailVerification} layout="vertical">
                             <Form.Item
                                 label="Verification Code"
                                 name="vcode"
                                 rules={[{ required: true, message: 'Please enter the verification code!' }]}
                             >
-                                <Input 
-                                    prefix={<SafetyCertificateOutlined />} 
+                                <Input
+                                    prefix={<SafetyCertificateOutlined />}
                                     placeholder="Enter verification code"
                                     size="large"
                                 />

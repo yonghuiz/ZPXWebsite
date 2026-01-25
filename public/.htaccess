@@ -1,4 +1,20 @@
-Options -MultiViews
+Options +FollowSymLinks
 RewriteEngine On
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteRule ^ index.html [QSA,L]
+
+# Force MIME types for common file extensions
+<IfModule mod_mime.c>
+    AddType application/javascript .js
+    AddType text/css .css
+    AddType application/json .json
+</IfModule>
+
+# Serve all existing files directly - no rewriting
+RewriteCond %{REQUEST_FILENAME} -f
+RewriteRule .* - [L]
+
+# Serve all existing directories directly - no rewriting  
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule .* - [L]
+
+# Only rewrite non-existent files to index.html
+RewriteRule .* index.html [L]
