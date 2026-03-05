@@ -82,15 +82,15 @@ class Profile extends Component {
             visible: false,
             loading1: false,
             vcode_got: '',
-            vcode : ''
+            vcode: ''
         }
         this.handleSubmit = this.handleSubmit.bind(this);
         // this.handleChange = this.handleChange.bind(this);
         this.handleStateChange = this.handleStateChange.bind(this);
-       this.rendersendcode = this.rendersendcode.bind(this);
-       this.sendVCode = this.sendVCode.bind(this);
-       this.handleVcodeSubmit = this.handleVcodeSubmit.bind(this);
-       this.handleVcodeChange = this.handleVcodeChange.bind(this);
+        this.rendersendcode = this.rendersendcode.bind(this);
+        this.sendVCode = this.sendVCode.bind(this);
+        this.handleVcodeSubmit = this.handleVcodeSubmit.bind(this);
+        this.handleVcodeChange = this.handleVcodeChange.bind(this);
 
     }
     showModal = () => {
@@ -167,7 +167,7 @@ class Profile extends Component {
                     firstName: values.first_name,
                     lastName: values.last_name,
                     nickName: values.nickname,
-                  email: this.state.email,
+                    email: this.state.email,
                     phone: values.phone,
                     zipcode: values.zipcode,
                     city: values.city,
@@ -176,14 +176,14 @@ class Profile extends Component {
                     addressline2: addressline2,
                     householderMember: values.householdermember
                 })
-                .then(data => message.success("Update Success！"),
-                localStorage.setItem('isProfileCompleted', 1),
+                    .then(data => message.success("Update Success！"),
+                        localStorage.setItem('isProfileCompleted', 1),
 
-                setTimeout(() => {
-                    this.setState({ redict: true, redictTo: '/account/dashboard' })
-                  }, 1500)
-            )
-            .catch(msg=> showErrorMessage.call(this, 'Update error:' + msg))
+                        setTimeout(() => {
+                            this.setState({ redict: true, redictTo: '/account/dashboard' })
+                        }, 1500)
+                    )
+                    .catch(msg => showErrorMessage.call(this, 'Update error:' + msg))
 
             }
         });
@@ -191,65 +191,65 @@ class Profile extends Component {
     }
 
     handleVcodeChange(event) {
-        
-            let name = event.target.name;
-            // let errName = name + '_err';
-            let value = event.target.value
-            this.setState({ [name]: value,  ModalText: ''});
-            //       console.log (value,name,this.state[errName]+'1');
-            // if (this.state[errName] !== '')
-            //     this.check(name, value);
-        
+
+        let name = event.target.name;
+        // let errName = name + '_err';
+        let value = event.target.value
+        this.setState({ [name]: value, ModalText: '' });
+        //       console.log (value,name,this.state[errName]+'1');
+        // if (this.state[errName] !== '')
+        //     this.check(name, value);
+
     }
 
-    handleVcodeSubmit(){
+    handleVcodeSubmit() {
         let vcode_got = this.state.vcode_got;
-        
+
         if (vcode_got === undefined || vcode_got === null || vcode_got === '') {
             this.setState({
-                ModalText: 'please click Get Code button again' ,
+                ModalText: 'please click Get Code button again',
                 // loadcancel: false,
             })
             return;
         }
-      
-        if (vcode_got.toString() !==this.state.vcode ) {
+
+        if (vcode_got.toString() !== this.state.vcode) {
             this.setState({
-                ModalText: 'please input right code' ,
-               })
+                ModalText: 'please input right code',
+            })
             return;
         }
         else {
             this.setState({
-                ModalText: 'Email verification is successful' ,
-               
+                ModalText: 'Email verification is successful',
+
             })
             post_data_token(EMAIL_VERIFY_URL, {
                 email: this.state.email,
-                
+
             })
                 .then(data => message.success("Update Success！"),
                     localStorage.setItem('isEmailVerified', 1),
-                   this.setState ({emailverified: 1}) )
+                    this.setState({ emailverified: 1 }))
                 .catch(err => showErrorMessage.call(this, 'Update error:' + err))
 
             setTimeout(() => {
-                this.setState({ visible: false,})
-              }, 1500);
-            
+                this.setState({ visible: false, })
+            }, 1500);
+
             return;
         }
 
-      }
+    }
     handleCancel = () => {
         // console.log('Clicked cancel button');
         this.setState({
-            visible:false
+            visible: false
         });
     };
 
     rendersendcode() {
-       
+
         return (
             <Modal
                 title="Input the verification code "
@@ -258,19 +258,19 @@ class Profile extends Component {
                 onCancel={this.handleCancel}
                 footer={[
                     <Button key="back" onClick={this.handleCancel}>
-                      Return
+                        Return
                     </Button>,
-                    <Button key="submit" type="primary"  onClick={this.handleVcodeSubmit}>
-                      Submit
+                    <Button key="submit" type="primary" onClick={this.handleVcodeSubmit}>
+                        Submit
                     </Button>,
                     <Button
-                    type="secondary"
-                      onClick={this.sendVCode}
+                        type="secondary"
+                        onClick={this.sendVCode}
                     >
-                     {this.state.loading1 && <span>Waiting</span>}
-                    {!this.state.loading1 && <span>Get Code</span>}
+                        {this.state.loading1 && <span>Waiting</span>}
+                        {!this.state.loading1 && <span>Get Code</span>}
                     </Button>,
-                  ]}
+                ]}
             >
                 <Form >
                     <Form.Item label="Verification Code">
@@ -293,7 +293,7 @@ class Profile extends Component {
                 this.setState({ loading1: false });
             })
             .catch((error) => {
-                showErrorMessage.call(this, this, window.appLocale.messages['page.user.vcode.send.err'] || "Sent vcode fail," + error);
+                showErrorMessage.call(this, window.appLocale.messages['page.user.vcode.send.err'] || "Sent vcode fail," + error);
                 // console.error(error);
                 this.setState({ loading1: false });
             });
@@ -354,9 +354,9 @@ class Profile extends Component {
                                 </p>
                                 <p>
 
-                                    {!this.state.emailverified && <Button type="primary" style={{ marginRight: 3 }} onClick={this.showModal}><span>Please verify email</span> </Button>  }
-                                    
-                                   {this.rendersendcode() }
+                                    {!this.state.emailverified && <Button type="primary" style={{ marginRight: 3 }} onClick={this.showModal}><span>Please verify email</span> </Button>}
+
+                                    {this.rendersendcode()}
                                     {this.state.emailverified && <Button type="secondary" style={{ marginRight: 3 }} disabled><span>Verified</span> </Button>}
 
                                     {/* <Button type="primary" onClick={this.sendVCode}>
@@ -452,11 +452,11 @@ class Profile extends Component {
                                         })(<Input />)}
                                     </Form.Item>
                                     <Form.Item {...tailFormItemLayout}>
-                                    {!this.state.emailverified && <Button key="submit" type="primary" style={{ marginRight: 3 }}  disabled><span>Please verify email</span> </Button>  }
-                                  
-                                     {this.state.emailverified && <Button key="submit" type="primary" htmlType="submit" ><span>Submit</span> </Button>}
+                                        {!this.state.emailverified && <Button key="submit" type="primary" style={{ marginRight: 3 }} disabled><span>Please verify email</span> </Button>}
+
+                                        {this.state.emailverified && <Button key="submit" type="primary" htmlType="submit" ><span>Submit</span> </Button>}
                                         {/* <Button key="submit" type="primary" htmlType="submit">      Submit         </Button> */}
-                                        
+
                                     </Form.Item>
                                 </Form>
                                 {ModalBox.call(this)}

@@ -1,8 +1,9 @@
 //import axios from "axios";
 
 // export const ROOT_URL = 'http://zipcodexpress.unibox.com.cn/opr';
-export const IMAGE_URL = 'http://cdn.dev.unibox.com.cn/';
-export const ROOT_URL = 'https://apis.zipcodexpress.com/opr';
+// export const IMAGE_URL = 'http://cdn.dev.unibox.com.cn/';
+// export const ROOT_URL = 'https://apis.zipcodexpress.com/opr';
+export const ROOT_URL = 'http://zpxapiphp8:8090/opr';
 export const BASE_URL = ROOT_URL + '/';
 //login
 export const LOGIN_REGISTER_URL = BASE_URL + 'login/register'

@@ -1,20 +1,15 @@
 // Email service utility
 // This can be configured to use different email services
 
-// Commented out EmailJS - now using local email server
-// import emailjs from '@emailjs/browser';
+// Import SMTP email service (QQ Enterprise Email)
+import { sendContactEmail as sendContactEmailSMTP, sendRegistrationEmail as sendRegistrationEmailSMTP, initEmailService as initSMTP } from './emailService-smtp.js';
 import { buildApiUrl, EMAIL_ENDPOINT, REGISTRATION_ENDPOINT } from '../config/api.jsx';
 
 
-// Local email server configuration
-const LOCAL_EMAIL_SERVER_URL = 'http://localhost:3000';
-const LOCAL_EMAIL_API_KEY = '123456789abcdef'; // Replace with your actual API key
-
-
-
-// Initialize local email service
+// Initialize SMTP email service
 export const initEmailService = () => {
-  console.log('Using local email server at:', LOCAL_EMAIL_SERVER_URL);
+  console.log('Using SMTP email service (QQ Enterprise Email)');
+  initSMTP();
 };
 
 // export const sendEmailViaEmailJS = async (templateParams) => {
@@ -111,39 +106,14 @@ export const sendEmailViaCustomSMTP = async (emailData) => {
 
 
 
-// Main email sending function - uses local email server first
+// Main email sending function - uses SMTP server
 export const sendContactEmail = async (formData) => {
-  // Send using Formspree
-  const FORMSPREE_ENDPOINT = import.meta.env.VITE_FORMSPREE_ENDPOINT || 'https://formspree.io/f/YOUR_FORM_ID';
+  // Use SMTP email service
   try {
-    const emailData = {
-      name: formData.name,
-      email: formData.email,
-      company: formData.company,
-      phone: formData.phone,
-      message: formData.message,
-      _subject: formData.company ? `Contact from ${formData.company}` : 'Website Contact',
-      _replyto: formData.email,
-    };
-    const response = await fetch(FORMSPREE_ENDPOINT, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json'
-      },
-      body: JSON.stringify(emailData)
-    });
-    if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(`Formspree error: ${errorData.error || response.statusText}`);
-    }
-    const result = await response.json();
-    return {
-      success: true,
-      message: 'Contact message sent successfully!'
-    };
+    return await sendContactEmailSMTP(formData);
   } catch (error) {
-    throw new Error(`Failed to send contact email via Formspree: ${error.message}`);
+    console.error('SMTP email failed:', error);
+    throw error;
   }
 };
 
@@ -269,42 +239,14 @@ export const sendContactEmail = async (formData) => {
 //   }
 // };
 
-// Main email sending function - uses local email server first
+// Main email sending function - uses SMTP server
 export const sendRegistrationEmail = async (formData) => {
-  // Send using Formspree
-  const FORMSPREE_ENDPOINT = import.meta.env.VITE_FORMSPREE_ENDPOINT || 'https://formspree.io/f/YOUR_FORM_ID';
+  // Use SMTP email service
   try {
-    const emailData = {
-      name: formData.name,
-      email: formData.email,
-      phone: formData.phone,
-      city: formData.city,
-      address: formData.address,
-      apartmentUnits: formData.apartmentUnits,
-      installationDate: formData.installationDate || 'Not specified',
-      comments: formData.comments || 'No additional comments',
-      _subject: `New Registration: ${formData.name} - ${formData.city}`,
-      _replyto: formData.email,
-    };
-    const response = await fetch(FORMSPREE_ENDPOINT, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json'
-      },
-      body: JSON.stringify(emailData)
-    });
-    if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(`Formspree error: ${errorData.error || response.statusText}`);
-    }
-    const result = await response.json();
-    return {
-      success: true,
-      message: 'Registration email sent successfully!'
-    };
+    return await sendRegistrationEmailSMTP(formData);
   } catch (error) {
-    throw new Error(`Failed to send registration email via Formspree: ${error.message}`);
+    console.error('SMTP email failed:', error);
+    throw error;
   }
 };
 

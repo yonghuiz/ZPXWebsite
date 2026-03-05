@@ -325,7 +325,7 @@ class Profile extends Component {
             this.state.zipcode
         ];
 
-        const completedFields = fields.filter(field => field && field.trim() !== '').length;
+        const completedFields = fields.filter(field => String(field ?? '').trim() !== '').length;
         return Math.round((completedFields / fields.length) * 100);
     };
 
