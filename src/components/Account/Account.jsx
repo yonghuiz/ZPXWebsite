@@ -15,23 +15,27 @@ import {
     Alert,
     List,
     Tag,
-    Progress
+    Progress,
+    message
 } from 'antd'
-import { 
-    CheckCircleOutlined, 
-    ClockCircleOutlined, 
-    InboxOutlined, 
-    HomeOutlined, 
-    MailOutlined, 
-    UserOutlined, 
+import {
+    CheckCircleOutlined,
+    ClockCircleOutlined,
+    InboxOutlined,
+    HomeOutlined,
+    MailOutlined,
+    UserOutlined,
     PhoneOutlined,
     EditOutlined,
-    PlusOutlined
+    PlusOutlined,
+    DollarOutlined,
+    WarningOutlined,
+    ReloadOutlined
 } from '@ant-design/icons';
 import { Table } from 'reactstrap';
 import { Link, Navigate } from 'react-router-dom';
 import AccountHeader from './AccountHeader';
-import { GET_BIND_APARTMENT, GET_USER_STAT_URL, GET_DEPT_LIST, GET_UNIT_LIST, get_data_token, BIND_APARTMENT, CANCELBIND_APARTMENT, GET_PICK_LIST, GET_STORE_LIST } from '../../config/network.jsx'
+import { GET_BIND_APARTMENT, GET_USER_STAT_URL, GET_DEPT_LIST, GET_UNIT_LIST, get_data_token, BIND_APARTMENT, CANCELBIND_APARTMENT, GET_PICK_LIST, GET_STORE_LIST, VALIDATE_PICKUP_CHARGE_URL, PAY_PICKUP_PENALTY_URL, post_data_token } from '../../config/network.jsx'
 import { ModalBox, showErrorMessage } from './MessageBox'
 import { FormattedMessage, } from 'react-intl';
 import { checkAuthToken, handleAuthError, isAuthError } from '../../utils/authUtils';
@@ -43,6 +47,7 @@ class Account extends Component {
         super(props);
         this.state = {
             redirectToLogin: false,
+            redirectTo: null,
             memberinfo: {},
             memberprofile: {},
             statusdetail: {},
@@ -52,6 +57,8 @@ class Account extends Component {
             transactions: [],
             recentDeliveries: [], // Add this for delivered packages in last 3 months
             pendingPackages: [], // Add this for pending packages
+            packagePenalties: {}, // Store penalty info for each package: { storeId: { amount, days, isPastDue } }
+            payingPenalty: {}, // Track which penalties are being paid: { storeId: boolean }
             deptzipcode: '',
             bindzipcodevisible: false,
             selectDeptvisible: false,
@@ -219,7 +226,7 @@ class Account extends Component {
         });
     };
     //   
-     renderunitn(apartid) {
+    renderunitn(apartid) {
         // if (this.state.selecteddept === '')
         //     return;
         get_data_token(GET_UNIT_LIST, { apartmentId: apartid })
@@ -263,7 +270,7 @@ class Account extends Component {
     handleChange(event) {
         this.renderunitn(event.target.value);
         this.setState({ selecteddept: event.target.value, loaddepartment: false });
-        
+
     }
     //unit选择事件
     handleUnitChange(event) {
@@ -564,7 +571,6 @@ class Account extends Component {
                 //departmentid
                 this.getApartment();
                 //
-                this.getPickList();
                 this.getPackageData(); // Load both recent deliveries and pending packages
             })
             .catch(err => {
@@ -608,13 +614,18 @@ class Account extends Component {
                 showErrorMessage.call(this, 'Get pickuplist error:' + err);
             })
     }
-    
+
     // Get packages delivered in the last 3 months and pending packages
     getPackageData() {
+        this.setState({
+            load: true,
+            packagePenalties: {} // Clear previous penalty data on refresh
+        });
+
         const endDate = new Date();
         const startDate = new Date();
         startDate.setMonth(startDate.getMonth() - 3); // 3 months ago
-        
+
         // Get delivered packages (packages with pickup time)
         get_data_token(GET_STORE_LIST, {
             startime: Math.floor(startDate.getTime() / 1000),
@@ -622,61 +633,292 @@ class Account extends Component {
         })
             .then(data => {
                 console.log("Store list API data:", data);
-                
+
                 // Filter for delivered packages (those with pickTime)
-                const deliveredPackages = data.storeList.filter(record => 
+                const deliveredPackages = data.storeList.filter(record =>
                     record.pickTime && record.pickTime !== '' && record.pickTime !== null
                 );
-                
+
                 console.log("Delivered packages:", deliveredPackages.length);
-                
-                this.setState({ 
+
+                this.setState({
                     recentDeliveries: deliveredPackages
                 });
             })
             .catch(err => {
                 console.error('Get recent deliveries error:', err);
-                this.setState({ 
+                this.setState({
                     recentDeliveries: []
                 });
             });
-            
+
         // Get pending packages (packages available for pickup)
         get_data_token(GET_PICK_LIST, {})
             .then(data => {
                 console.log("Pick list API data:", data);
-                
+
                 // These are packages stored but not yet picked up
                 const pendingPackages = data.storeList || [];
-                
+
                 console.log("Pending packages:", pendingPackages.length);
                 console.log("Sample pending package:", pendingPackages[0]);
-                
-                this.setState({ 
-                    pendingPackages: pendingPackages 
+
+                this.setState({
+                    pendingPackages: pendingPackages,
+                    records: pendingPackages, // Also populate records for table view
+                    load: false
+                }, () => {
+                    // Check for penalties on pending packages
+                    this.checkPackagePenalties(pendingPackages);
                 });
             })
             .catch(err => {
                 console.error('Get pending packages error:', err);
-                this.setState({ 
-                    pendingPackages: [] 
+                this.setState({
+                    pendingPackages: [],
+                    records: [], // Also clear records
+                    load: false
                 });
             });
     }
+
+    // Check if packages have penalties
+    checkPackagePenalties(packages) {
+        const memberId = localStorage.getItem('memberId');
+
+        if (!memberId || packages.length === 0) {
+            return;
+        }
+
+        // Calculate overdue status for each package
+        const currentTime = Math.floor(Date.now() / 1000); // Current time in seconds
+        const gracePeriodDays = 3; // 3 days grace period per spec
+
+        packages.forEach(pkg => {
+            // Handle different timestamp formats
+            let storeTime = pkg.storeTime;
+
+            // If it's a string, try to parse as integer first
+            if (typeof storeTime === 'string') {
+                storeTime = parseInt(storeTime, 10);
+            }
+
+            // If timestamp looks very large (likely in milliseconds), convert to seconds
+            // Unix timestamp in seconds won't exceed 4,102,444,800 until year 2100
+            if (storeTime > 4102444800) {
+                storeTime = Math.floor(storeTime / 1000);
+            }
+
+            // If timestamp is very small (likely just days or wrong format), try parsing as date
+            if (storeTime < 946684800) { // Before year 2000 in seconds
+                console.error(`Suspicious storeTime for package ${pkg.storeId}:`, pkg.storeTime);
+                // Try to parse as date string
+                const parsed = new Date(pkg.storeTime);
+                if (!isNaN(parsed.getTime())) {
+                    storeTime = Math.floor(parsed.getTime() / 1000);
+                } else {
+                    console.error(`Cannot parse storeTime for package ${pkg.storeId}, skipping penalty check`);
+                    return;
+                }
+            }
+
+            const daysStored = Math.floor((currentTime - storeTime) / (24 * 60 * 60));
+            const overdueDays = Math.max(0, daysStored - gracePeriodDays);
+
+            console.log(`Package ${pkg.storeId}:`, {
+                rawStoreTime: pkg.storeTime,
+                parsedStoreTime: storeTime,
+                storeDate: new Date(storeTime * 1000).toLocaleString(),
+                currentTime: currentTime,
+                daysStored: daysStored,
+                overdueDays: overdueDays
+            });
+
+            if (overdueDays > 0 && !pkg.penalty_paid_time) {
+                // Package is overdue and penalty not paid
+                // Show "Checking..." status immediately
+                const newPenalties = { ...this.state.packagePenalties };
+                newPenalties[pkg.storeId] = {
+                    amount: 0,
+                    days: 0,
+                    isPastDue: true,
+                    alreadyPaid: false,
+                    checking: true // Flag to show "Checking..." in UI
+                };
+                this.setState({ packagePenalties: newPenalties });
+
+                // Call API to get exact penalty from server
+                get_data_token(VALIDATE_PICKUP_CHARGE_URL, {
+                    memberId: memberId,
+                    storeId: pkg.storeId
+                })
+                    .then(result => {
+                        console.log(`API penalty result for package ${pkg.storeId}:`, result);
+
+                        // Update with exact API values
+                        const updatedPenalties = { ...this.state.packagePenalties };
+
+                        if (result.allowPickup === false && result.totalPenalty) {
+                            // Get overdue days from API if available
+                            const apiOverdueDays = result.packages && result.packages[0]
+                                ? result.packages[0].overdueDays
+                                : overdueDays;
+
+                            updatedPenalties[pkg.storeId] = {
+                                amount: parseFloat(result.totalPenalty),
+                                days: apiOverdueDays,
+                                isPastDue: true,
+                                alreadyPaid: false,
+                                checking: false
+                            };
+                        } else if (result.allowPickup === true) {
+                            // No penalty according to API
+                            delete updatedPenalties[pkg.storeId];
+                        } else {
+                            // API returned unexpected result, remove checking flag
+                            updatedPenalties[pkg.storeId] = {
+                                amount: 0,
+                                days: 0,
+                                isPastDue: false,
+                                alreadyPaid: false,
+                                checking: false
+                            };
+                        }
+
+                        this.setState({ packagePenalties: updatedPenalties });
+                    })
+                    .catch(err => {
+                        console.error(`Error checking penalty for package ${pkg.storeId}:`, err);
+
+                        // Remove checking flag on error
+                        const errorPenalties = { ...this.state.packagePenalties };
+                        if (errorPenalties[pkg.storeId]) {
+                            errorPenalties[pkg.storeId].checking = false;
+                            errorPenalties[pkg.storeId].isPastDue = false; // Hide if API fails
+                        }
+                        this.setState({ packagePenalties: errorPenalties });
+                    });
+            } else if (pkg.penalty_paid_time) {
+                // Penalty already paid
+                const newPenalties = { ...this.state.packagePenalties };
+                newPenalties[pkg.storeId] = {
+                    amount: parseFloat(pkg.penalty_amount || 0),
+                    days: overdueDays,
+                    isPastDue: false,
+                    alreadyPaid: true,
+                    checking: false
+                };
+                this.setState({ packagePenalties: newPenalties });
+            }
+        });
+    }
+
+    // Handle penalty payment
+    handlePayPenalty = (storeId, penaltyAmount) => {
+        const memberId = localStorage.getItem('memberId');
+
+        if (!memberId) {
+            message.error('Please login to pay penalty');
+            return;
+        }
+
+        // Show confirmation modal
+        Modal.confirm({
+            title: 'Pay Overdue Penalty',
+            content: (
+                <div>
+                    <p>Package ID: {storeId}</p>
+                    <p>Penalty Amount: <strong>${penaltyAmount.toFixed(2)}</strong></p>
+                    <p style={{ marginTop: '16px', color: '#666' }}>
+                        The penalty will be deducted from your wallet balance.
+                    </p>
+                    <Alert
+                        message="Important"
+                        description="Once paid, this amount is locked. You can pick up anytime without additional charges."
+                        type="info"
+                        showIcon
+                        style={{ marginTop: '12px' }}
+                    />
+                </div>
+            ),
+            okText: 'Pay Now',
+            cancelText: 'Cancel',
+            onOk: () => {
+                // Set loading state for this package
+                const newPayingState = { ...this.state.payingPenalty };
+                newPayingState[storeId] = true;
+                this.setState({ payingPenalty: newPayingState });
+
+                // Call payment API
+                post_data_token(PAY_PICKUP_PENALTY_URL, {
+                    memberId: memberId,
+                    storeId: storeId
+                })
+                    .then(data => {
+                        message.success(`Penalty paid successfully! New balance: $${data.newBalance}`);
+
+                        // Update penalty state - mark as paid
+                        const newPenalties = { ...this.state.packagePenalties };
+                        if (newPenalties[storeId]) {
+                            newPenalties[storeId].isPastDue = false;
+                            newPenalties[storeId].alreadyPaid = true;
+                        }
+
+                        // Clear loading state
+                        const clearPayingState = { ...this.state.payingPenalty };
+                        delete clearPayingState[storeId];
+
+                        this.setState({
+                            packagePenalties: newPenalties,
+                            payingPenalty: clearPayingState
+                        });
+
+                        // Reload package data
+                        this.getPackageData();
+                    })
+                    .catch(err => {
+                        // Clear loading state
+                        const clearPayingState = { ...this.state.payingPenalty };
+                        delete clearPayingState[storeId];
+                        this.setState({ payingPenalty: clearPayingState });
+
+                        // Handle specific error codes
+                        if (err.includes('Insufficient')) {
+                            Modal.confirm({
+                                title: 'Insufficient Wallet Balance',
+                                content: 'You need to add funds to your wallet to pay this penalty. Would you like to go to your wallet now?',
+                                okText: 'Go to Wallet',
+                                cancelText: 'Cancel',
+                                onOk: () => {
+                                    this.setState({ redirectToLogin: true, redirectTo: '/account/wallet' });
+                                }
+                            });
+                        } else if (err.includes('already paid')) {
+                            message.info('This penalty has already been paid');
+                            this.getPackageData(); // Refresh data
+                        } else {
+                            message.error('Failed to pay penalty: ' + err);
+                        }
+                    });
+            }
+        });
+    }
+
     //
     render() {
-        // Check if we need to redirect to login
+        // Check if we need to redirect to login or other pages
         if (this.state.redirectToLogin) {
-            return <Navigate to="/login" replace />;
+            const redirectPath = this.state.redirectTo || '/account/login';
+            return <Navigate to={redirectPath} replace />;
         }
 
         const memberinfo = this.state.memberinfo;
         const memberprofile = this.state.memberprofile;
         let completeinfo;
-        if (Object.keys(memberinfo).length === 0) { 
-            completeinfo = "Not complete profile"; 
-        } else { 
-            completeinfo = (memberinfo.statusDetail.isProfileCompleted === 1) ? "Complete profile" : "Not complete profile"; 
+        if (Object.keys(memberinfo).length === 0) {
+            completeinfo = "Not complete profile";
+        } else {
+            completeinfo = (memberinfo.statusDetail.isProfileCompleted === 1) ? "Complete profile" : "Not complete profile";
         }
 
         const profileComplete = memberinfo.statusDetail?.isProfileCompleted === 1;
@@ -685,6 +927,10 @@ class Account extends Component {
         return (
             <div className="dashboard-container">
                 <AccountHeader page={"Account"}
+                    memberData={{
+                        member: this.state.memberinfo,
+                        profile: this.state.memberprofile,
+                    }}
                     title={<FormattedMessage id="page.sidnav.title.Dashboard" defaultMessage="Dashboard" />}
                 />
 
@@ -716,9 +962,9 @@ class Account extends Component {
                                                 Update Profile
                                             </Button>
                                         </Link>
-                                        <Button 
-                                            type="default" 
-                                            icon={<PlusOutlined />} 
+                                        <Button
+                                            type="default"
+                                            icon={<PlusOutlined />}
                                             onClick={this.showModal}
                                             block
                                         >
@@ -740,9 +986,9 @@ class Account extends Component {
                                     prefix={<CheckCircleOutlined style={{ color: profileComplete ? '#52c41a' : '#faad14' }} />}
                                     valueStyle={{ color: profileComplete ? '#52c41a' : '#faad14' }}
                                 />
-                                <Progress 
-                                    percent={profileComplete ? 100 : 60} 
-                                    size="small" 
+                                <Progress
+                                    percent={profileComplete ? 100 : 60}
+                                    size="small"
                                     status={profileComplete ? "success" : "active"}
                                     style={{ marginTop: 8 }}
                                 />
@@ -780,11 +1026,44 @@ class Account extends Component {
                         </Col>
                     </Row>
 
+                    {/* Overdue Packages Alert - Show if any packages have unpaid penalties */}
+                    {Object.keys(this.state.packagePenalties).some(key =>
+                        this.state.packagePenalties[key].isPastDue && !this.state.packagePenalties[key].checking
+                    ) && (
+                            <Alert
+                                message="Overdue Packages Require Payment"
+                                description={
+                                    <div>
+                                        <p>
+                                            You have {Object.keys(this.state.packagePenalties).filter(key =>
+                                                this.state.packagePenalties[key].isPastDue && !this.state.packagePenalties[key].checking
+                                            ).length} package(s) with overdue penalties.
+                                            Total penalty: <strong>
+                                                ${Object.keys(this.state.packagePenalties)
+                                                    .filter(key => this.state.packagePenalties[key].isPastDue && !this.state.packagePenalties[key].checking)
+                                                    .reduce((sum, key) => sum + this.state.packagePenalties[key].amount, 0)
+                                                    .toFixed(2)}
+                                            </strong>
+                                        </p>
+                                        <p style={{ marginTop: '8px', marginBottom: 0 }}>
+                                            Please pay the penalty to pick up your packages.
+                                            See "Pending Packages" section below for details.
+                                        </p>
+                                    </div>
+                                }
+                                type="error"
+                                icon={<WarningOutlined />}
+                                showIcon
+                                style={{ marginTop: 24, marginBottom: 24 }}
+                                closable
+                            />
+                        )}
+
                     {/* Main Content - Row 3: Profile Information and Subscribed Apartments */}
                     <Row gutter={[24, 24]}>
                         {/* User Profile Section */}
                         <Col xs={24} lg={12}>
-                            <Card 
+                            <Card
                                 title={
                                     <div className="space-horizontal">
                                         <UserOutlined />
@@ -805,7 +1084,7 @@ class Account extends Component {
                                         <div className="space-horizontal">
                                             <MailOutlined />
                                             {memberinfo.email}
-                                            {memberinfo.statusDetail?.isEmailVerified && 
+                                            {memberinfo.statusDetail?.isEmailVerified &&
                                                 <Tag color="green"><CheckCircleOutlined />Verified</Tag>
                                             }
                                         </div>
@@ -854,7 +1133,7 @@ class Account extends Component {
 
                         {/* Apartments Section */}
                         <Col xs={24} lg={12}>
-                            <Card 
+                            <Card
                                 title={
                                     <div className="card-title-mobile">
                                         <div className="space-horizontal">
@@ -862,15 +1141,15 @@ class Account extends Component {
                                             <span>Subscribed Apartments</span>
                                         </div>
                                         <div className="card-actions-mobile">
-                                            <Button 
-                                                type="primary" 
+                                            <Button
+                                                type="primary"
                                                 icon={<PlusOutlined />}
                                                 onClick={this.showModal}
                                                 size="small"
                                             >
                                                 Subscribe
                                             </Button>
-                                            <Button 
+                                            <Button
                                                 danger
                                                 onClick={this.cancelshowModal}
                                                 size="small"
@@ -882,14 +1161,14 @@ class Account extends Component {
                                 }
                                 extra={
                                     <div className="card-actions-desktop">
-                                        <Button 
-                                            type="primary" 
+                                        <Button
+                                            type="primary"
                                             icon={<PlusOutlined />}
                                             onClick={this.showModal}
                                         >
                                             Subscribe
                                         </Button>
-                                        <Button 
+                                        <Button
                                             danger
                                             onClick={this.cancelshowModal}
                                         >
@@ -907,8 +1186,8 @@ class Account extends Component {
                                         <div style={{ marginTop: '16px', color: '#999' }}>
                                             No apartments subscribed yet
                                         </div>
-                                        <Button 
-                                            type="primary" 
+                                        <Button
+                                            type="primary"
                                             icon={<PlusOutlined />}
                                             onClick={this.showModal}
                                             style={{ marginTop: '16px' }}
@@ -950,7 +1229,7 @@ class Account extends Component {
                     <Row gutter={[24, 24]}>
                         {/* Recent Deliveries Section */}
                         <Col xs={24} lg={12}>
-                            <Card 
+                            <Card
                                 title={
                                     <div className="card-title-mobile">
                                         <div className="space-horizontal">
@@ -986,7 +1265,7 @@ class Account extends Component {
                                     <div style={{ maxHeight: '300px', overflowY: 'auto' }}>
                                         <Table size="sm" responsive>
                                             <thead>
-                                                <tr>             
+                                                <tr>
                                                     <th>Store Id</th>
                                                     <th>Cabinet</th>
                                                     <th>Code</th>
@@ -999,15 +1278,15 @@ class Account extends Component {
                                                 {
                                                     this.state.recentDeliveries.slice(0, 10).map((record, index) =>
                                                         <tr key={record.storeId || index}>
-                                                           <td>{record.storeId}</td>  
-                                                           <td>{record.cabinetId}</td>  
-                                                           <td>{record.pickCode}</td>  
-                                                           <td>{record.storeTime}</td>  
-                                                           <td style={{ color: '#52c41a', fontWeight: 'bold' }}>{record.pickTime}</td>
-                                                           <td>
-                                                               <Tag color="green" size="small">Delivered</Tag>
-                                                           </td>
-                                                      </tr>
+                                                            <td>{record.storeId}</td>
+                                                            <td>{record.cabinetId}</td>
+                                                            <td>{record.pickCode}</td>
+                                                            <td>{record.storeTime}</td>
+                                                            <td style={{ color: '#52c41a', fontWeight: 'bold' }}>{record.pickTime}</td>
+                                                            <td>
+                                                                <Tag color="green" size="small">Delivered</Tag>
+                                                            </td>
+                                                        </tr>
                                                     )
                                                 }
                                             </tbody>
@@ -1019,11 +1298,24 @@ class Account extends Component {
 
                         {/* Pending Packages Section */}
                         <Col xs={24} lg={12}>
-                            <Card 
+                            <Card
                                 title={
-                                    <div className="space-horizontal">
-                                        <ClockCircleOutlined />
-                                        <span>Pending Packages</span>
+                                    <div className="card-title-mobile">
+                                        <div className="space-horizontal">
+                                            <ClockCircleOutlined />
+                                            <span>Pending Packages</span>
+                                        </div>
+                                        <div className="card-actions-mobile">
+                                            <Button
+                                                type="default"
+                                                size="small"
+                                                icon={<ReloadOutlined />}
+                                                onClick={() => this.getPackageData()}
+                                                loading={this.state.load}
+                                            >
+                                                Refresh
+                                            </Button>
+                                        </div>
                                     </div>
                                 }
                                 className="packages-card"
@@ -1041,27 +1333,71 @@ class Account extends Component {
                                     <div style={{ maxHeight: '300px', overflowY: 'auto' }}>
                                         <Table size="sm" responsive>
                                             <thead>
-                                                <tr>             
+                                                <tr>
                                                     <th>Store Id</th>
                                                     <th>Cabinet</th>
                                                     <th>Code</th>
                                                     <th>Stored</th>
                                                     <th>Status</th>
+                                                    <th>Action</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 {
-                                                    this.state.pendingPackages.slice(0, 10).map((record, index) =>
-                                                        <tr key={record.storeId || index}>
-                                                           <td>{record.storeId}</td>  
-                                                           <td>{record.cabinetId}</td>  
-                                                           <td>{record.pickCode}</td>  
-                                                           <td>{record.storeTime}</td>  
-                                                           <td>
-                                                               <Tag color="orange" size="small">Pending</Tag>
-                                                           </td>
-                                                      </tr>
-                                                    )
+                                                    this.state.pendingPackages.slice(0, 10).map((record, index) => {
+                                                        const penaltyInfo = this.state.packagePenalties[record.storeId];
+                                                        const isPaying = this.state.payingPenalty[record.storeId] || false;
+
+                                                        return (
+                                                            <tr key={record.storeId || index}>
+                                                                <td>{record.storeId}</td>
+                                                                <td>{record.cabinetId}</td>
+                                                                <td>{record.pickCode}</td>
+                                                                <td>{record.storeTime}</td>
+                                                                <td>
+                                                                    {penaltyInfo && penaltyInfo.checking ? (
+                                                                        <div>
+                                                                            <Tag color="processing" icon={<ReloadOutlined spin />}>
+                                                                                Checking...
+                                                                            </Tag>
+                                                                        </div>
+                                                                    ) : penaltyInfo && penaltyInfo.isPastDue ? (
+                                                                        <div>
+                                                                            <Tag color="error" icon={<WarningOutlined />}>
+                                                                                Past Due
+                                                                            </Tag>
+                                                                            <div style={{ fontSize: '12px', color: '#ff4d4f', marginTop: '4px' }}>
+                                                                                ${penaltyInfo.amount.toFixed(2)} ({penaltyInfo.days} days)
+                                                                            </div>
+                                                                        </div>
+                                                                    ) : penaltyInfo && penaltyInfo.alreadyPaid ? (
+                                                                        <div>
+                                                                            <Tag color="success">Ready</Tag>
+                                                                            <div style={{ fontSize: '12px', color: '#52c41a', marginTop: '4px' }}>
+                                                                                Penalty Paid
+                                                                            </div>
+                                                                        </div>
+                                                                    ) : (
+                                                                        <Tag color="orange" size="small">Pending</Tag>
+                                                                    )}
+                                                                </td>
+                                                                <td>
+                                                                    {penaltyInfo && penaltyInfo.isPastDue && !penaltyInfo.alreadyPaid && !penaltyInfo.checking && (
+                                                                        <Button
+                                                                            type="primary"
+                                                                            size="small"
+                                                                            danger
+                                                                            icon={<DollarOutlined />}
+                                                                            loading={isPaying}
+                                                                            onClick={() => this.handlePayPenalty(record.storeId, penaltyInfo.amount)}
+                                                                        >
+                                                                            Pay
+                                                                        </Button>
+                                                                    )}
+                                                                </td>
+                                                            </tr>
+                                                        );
+                                                    })
                                                 }
                                             </tbody>
                                         </Table>

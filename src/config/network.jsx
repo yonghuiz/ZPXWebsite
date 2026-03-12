@@ -3,7 +3,8 @@
 // export const ROOT_URL = 'http://zipcodexpress.unibox.com.cn/opr';
 // export const IMAGE_URL = 'http://cdn.dev.unibox.com.cn/';
 // export const ROOT_URL = 'https://apis.zipcodexpress.com/opr';
-export const ROOT_URL = 'http://zpxapiphp8:8090/opr';
+// export const ROOT_URL = 'http://zpxapiphp8:8090/opr';
+export const ROOT_URL = 'http://tp8api:8091/opr';
 export const BASE_URL = ROOT_URL + '/';
 //login
 export const LOGIN_REGISTER_URL = BASE_URL + 'login/register'
@@ -20,12 +21,29 @@ export const ADD_APP_KEY_URL = BASE_URL + 'login/createAppKey'
 export const DEL_APP_KEY_URL = BASE_URL + 'login/deleteAppKey'
 export const GET_MEMBER_INFO_URL = BASE_URL + 'member/getMember'
 export const UPDATE_MEMBER_INFO_URL = BASE_URL + 'login/updateMemberInfo'
-export const WALLET_BALANCE_URL = BASE_URL + 'wallet/getUserBalance'
+
 export const PAYPAL_TOKEN_URL = BASE_URL + 'paypal/token'
 export const PAYPAL_CHECKOUT_URL = BASE_URL + 'paypal/checkout'
 export const GET_USER_STAT_URL = BASE_URL + 'member/getMember'
 export const RECHARGE_DETAIL_URL = BASE_URL + 'state/getUserRechargeDetail'
 export const POST_SUPPORT_URL = BASE_URL + 'support/postcontent'
+
+// Wallet APIs (from chargeapi.md)
+export const GET_WALLET_URL = BASE_URL + 'Wallet/getWallet'
+export const RECHARGE_WALLET_URL = BASE_URL + 'Wallet/recharge'
+export const GET_RECHARGE_CONFIG_URL = BASE_URL + 'Wallet/getRechargeAmountConfig'
+export const WALLET_BALANCE_URL = BASE_URL + 'Wallet/getUserBalance'
+export const GET_STATEMENT_LIST = BASE_URL + 'statement/getStatementList';
+
+// Card Credit APIs (from chargeapi.md)
+export const GET_CARD_LIST_URL = BASE_URL + 'CardCredit/getCardCreditList'
+export const ADD_CARD_URL = BASE_URL + 'CardCredit/insertCardCredit'
+export const SET_DEFAULT_CARD_URL = BASE_URL + 'CardCredit/setDefault'
+export const DELETE_CARD_URL = BASE_URL + 'CardCredit/delete'
+
+// Penalty Payment APIs (from PENALTY_PREPAYMENT_README.md)
+export const VALIDATE_PICKUP_CHARGE_URL = BASE_URL + 'zippora/validatePickupChargeRule'
+export const PAY_PICKUP_PENALTY_URL = BASE_URL + 'zippora/payPickupPenalty'
 
 
 //PROFILE
@@ -51,10 +69,36 @@ export const GET_DEPT_LIST = BASE_URL + 'zippora/getApartmentList'
 export const GET_UNIT_LIST = BASE_URL + 'zippora/getUnitList'
 export const BIND_APARTMENT = BASE_URL + 'zippora/bindApartment'
 export const CANCELBIND_APARTMENT = BASE_URL + 'zippora/cancelBindApartment'
-//
+// 
 //STORE
 export const GET_STORE_LIST = BASE_URL + 'zippora/getStoreListN';
 export const GET_PICK_LIST = BASE_URL + 'zippora/getPickList';
+const SHORT_LIVED_CACHE_URLS = new Set([
+    GET_MEMBER_INFO_URL,
+    GET_USER_STAT_URL,
+    GET_BIND_APARTMENT,
+    GET_STORE_LIST,
+    GET_PICK_LIST,
+]);
+const SHORT_LIVED_REQUEST_CACHE_TTL_MS = 2000;
+const shortLivedRequestCache = new Map();
+
+function redirectToLoginPage() {
+    shortLivedRequestCache.clear();
+    localStorage.clear();
+
+    if (typeof window === 'undefined') {
+        return;
+    }
+
+    const loginPath = '/account/login';
+    if (window.location.pathname === loginPath) {
+        window.location.reload();
+        return;
+    }
+
+    window.location.assign(loginPath);
+}
 //PICK
 /*export const GET_PICK_LIST = 'pick/getPickList';
 export const COMPLAIN_PICK = 'pick/complainPick';
@@ -133,7 +177,7 @@ export function post_data(url, data) {
             .then(response => { return response.json() })
             .then(json => {
                 if (json.ret === 1) {
-                    localStorage.clear();
+                    redirectToLoginPage();
                     reject('Please login again.');
                 }
                 if (json.ret !== 0)
@@ -160,6 +204,10 @@ export function post_data1(url, data) {
         })
             .then(response => { return response.json() })
             .then(json => {
+                if (json.ret === 1) {
+                    redirectToLoginPage();
+                    reject('Please login again.');
+                }
                 if (json.ret !== 0)
                     reject(json.msg);
                 resolve(json.data || {});
@@ -187,7 +235,7 @@ export function get_data(url, params) {
             .then(response => { return response.json() })
             .then(json => {
                 if (json.ret === 1) {
-                    localStorage.clear();
+                    redirectToLoginPage();
                     reject('Please login again.');
                 }
                 if (json.ret !== 0)
@@ -201,6 +249,53 @@ export function get_data(url, params) {
     return promise;
 
 }
+function getShortLivedCacheKey(url, params) {
+    return JSON.stringify({
+        url,
+        params: params || {},
+        accessToken: localStorage.getItem('accessToken'),
+        memberId: localStorage.getItem('memberId'),
+    });
+}
+
+function getCachedShortLivedRequest(url, params, requestFactory) {
+    const cacheKey = getShortLivedCacheKey(url, params);
+    const now = Date.now();
+    const cachedEntry = shortLivedRequestCache.get(cacheKey);
+
+    if (cachedEntry) {
+        if (cachedEntry.promise) {
+            return cachedEntry.promise;
+        }
+
+        if (cachedEntry.expiresAt > now) {
+            return Promise.resolve(cachedEntry.data);
+        }
+
+        shortLivedRequestCache.delete(cacheKey);
+    }
+
+    const request = requestFactory()
+        .then(data => {
+            shortLivedRequestCache.set(cacheKey, {
+                data,
+                expiresAt: Date.now() + SHORT_LIVED_REQUEST_CACHE_TTL_MS,
+            });
+            return data;
+        })
+        .catch(error => {
+            shortLivedRequestCache.delete(cacheKey);
+            throw error;
+        });
+
+    shortLivedRequestCache.set(cacheKey, {
+        promise: request,
+        expiresAt: now + SHORT_LIVED_REQUEST_CACHE_TTL_MS,
+    });
+
+    return request;
+}
+
 function checkToken(data) {
     if (data == null) data = {};
     data._accessToken = localStorage.getItem('accessToken');
@@ -208,6 +303,7 @@ function checkToken(data) {
     data._memberId = localStorage.getItem('memberId');
     if (data._accessToken == null)
         return new Promise((resolve, reject) => {
+            redirectToLoginPage();
             reject('please login again');
         })
     return null;
@@ -220,11 +316,17 @@ export function post_data_token(url, data) {
 export function get_data_token(url, data) {
     let ret = checkToken(data);
     if (ret != null) return ret;
+
+    if (SHORT_LIVED_CACHE_URLS.has(url)) {
+        return getCachedShortLivedRequest(url, data, () => get_data(url, data));
+    }
+
     return get_data(url, data);
 }
 
 
 export function logout() {
+    shortLivedRequestCache.clear();
     localStorage.clear();
 }
 
@@ -235,6 +337,7 @@ export function login(email, password) {
             email: email,
             psd: password,
         }).then(data => {
+            shortLivedRequestCache.clear();
             localStorage.setItem('accessToken', data.accessToken);
             localStorage.setItem('memberId', data.memberId);
             localStorage.setItem('isProfileCompleted', data.statusDetail.isProfileCompleted);

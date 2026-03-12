@@ -24,6 +24,9 @@ import Quote from './pages/Register/Quote'
 import Login from './components/Account/Login'
 import Register from './components/Account/Register'
 import Account from './components/Account/Account'
+import Wallet from './components/Account/Wallet'
+import Recharge from './components/Account/Recharge'
+import PaymentMethod from './components/Account/PaymentMethod'
 import Transactions from './components/Account/Transactions'
 import Profile from './components/Account/Profile'
 import ChangePassword from './components/Account/ChangePassword'
@@ -61,12 +64,15 @@ function AppContent() {
         <Route path="/contact" element={<Contact />} />
         <Route path="/faq" element={<FAQ />} />
         <Route path="/register" element={<Quote />} />
-        
+
         <Route path="/account" element={<Login />} />
         <Route path="/account/dashboard" element={<Account />} />
         <Route path="/account/logout" element={<Logout />} />
         <Route path="/account/login" element={<Login />} />
         <Route path="/account/register" element={<Register />} />
+        <Route path="/account/wallet" element={<Wallet />} />
+        <Route path="/account/recharge" element={<Recharge />} />
+        <Route path="/account/paymentmethod" element={<PaymentMethod />} />
         <Route path="/account/transactions" element={<Transactions />} />
         <Route path="/account/Profile" element={<Profile />} />
         <Route path="/account/changepassword" element={<ChangePassword />} />
@@ -74,7 +80,7 @@ function AppContent() {
         <Route path="/account/demo" element={<Demo />} />
         <Route path="/account/ForgotPassword" element={<ForgotPassword />} />
         <Route path="/UserAgreement" element={<UserAgreement />} />
-       
+
       </Routes>
       {!isAccountPage && <Footer />}
     </div>

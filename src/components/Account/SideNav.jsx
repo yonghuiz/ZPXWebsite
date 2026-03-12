@@ -11,7 +11,9 @@ import {
     KeyOutlined,
     QuestionCircleOutlined,
     LogoutOutlined,
-    SettingOutlined
+    SettingOutlined,
+    WalletOutlined,
+    CreditCardOutlined
 } from '@ant-design/icons';
 import { GET_MEMBER_INFO_URL, get_data_token } from '../../config/network.jsx';
 
@@ -28,7 +30,39 @@ class SideNav extends Component {
     }
 
     componentDidMount() {
+        if (this.hydrateFromProps(this.props)) {
+            return;
+        }
+
         this.checkMinimumProfile();
+    }
+
+    componentDidUpdate(prevProps) {
+        if (prevProps.memberData !== this.props.memberData) {
+            this.hydrateFromProps(this.props);
+        }
+    }
+
+    hydrateFromProps = (props) => {
+        const memberData = props.memberData;
+
+        if (!memberData || !memberData.profile || !memberData.member) {
+            return false;
+        }
+
+        const profile = memberData.profile || {};
+        const member = memberData.member || {};
+        const hasFirstName = profile.firstName && profile.firstName.trim() !== '';
+        const hasLastName = profile.lastName && profile.lastName.trim() !== '';
+        const hasEmail = member.email && member.email.trim() !== '';
+        const hasPhone = member.phone && member.phone.trim() !== '';
+
+        this.setState({
+            hasMinimumProfile: hasFirstName && hasLastName && hasEmail && hasPhone,
+            profileData: { profile, member }
+        });
+
+        return true;
     }
 
     checkMinimumProfile = () => {
@@ -37,15 +71,15 @@ class SideNav extends Component {
             .then(data => {
                 const profile = data.profile || {};
                 const member = data.member || {};
-                
+
                 const hasFirstName = profile.firstName && profile.firstName.trim() !== '';
                 const hasLastName = profile.lastName && profile.lastName.trim() !== '';
                 const hasEmail = member.email && member.email.trim() !== '';
                 const hasPhone = member.phone && member.phone.trim() !== '';
-                
+
                 const hasMinimumProfile = hasFirstName && hasLastName && hasEmail && hasPhone;
-                
-                this.setState({ 
+
+                this.setState({
                     hasMinimumProfile,
                     profileData: { profile, member }
                 });
@@ -57,11 +91,16 @@ class SideNav extends Component {
     }
 
     getSelectedKey() {
-        switch(this.props.page) {
+        switch (this.props.page) {
             case 'Account':
                 return 'dashboard';
             case 'Profile':
                 return 'profile';
+            case 'Wallet':
+            case 'Recharge':
+                return 'wallet';
+            case 'PaymentMethod':
+                return 'paymentmethod';
             case 'Transactions':
                 return 'transactions';
             case 'ChangePassword':
@@ -77,7 +116,7 @@ class SideNav extends Component {
         let isprofile = localStorage.getItem('isProfileCompleted');
         const selectedKey = this.getSelectedKey();
         const userEmail = localStorage.getItem('userEmail') || 'User';
-        
+
         // Get user's display name from profile data
         let displayName = userEmail;
         if (this.state.profileData && this.state.profileData.profile) {
@@ -90,20 +129,20 @@ class SideNav extends Component {
                 displayName = lastName;
             }
         }
-        
+
         // Show full menu if profile is complete OR if user has minimum required fields
         if (isprofile === '1' || this.state.hasMinimumProfile) {
             return (
                 <>
                     {/* Mobile Overlay */}
                     {this.props.sidenav_show && (
-                        <div 
+                        <div
                             className="mobile-overlay show"
                             onClick={this.props.onOverlayClick}
                         />
                     )}
-                    
-                    <Sider 
+
+                    <Sider
                         width={250}
                         className={this.props.sidenav_show ? 'mobile-show' : ''}
                         style={{
@@ -118,95 +157,109 @@ class SideNav extends Component {
                         }}
                         theme="light"
                     >
-                    {/* Brand Header */}
-                    <div className="modern-side-header">
-                        <Link to="/" className="brand-link">
-                            <img 
-                                alt="ZipcodeXpress" 
-                                className="modern-brand-img" 
-                                src="/logo-zipcodexpress.svg" 
-                            />
-                        </Link>
-                    </div>
-
-                    {/* User Profile Section */}
-                    <div className="user-profile-section">
-                        <Avatar size={48} icon={<UserOutlined />} className="user-avatar" />
-                        <div className="user-info">
-                            <Text strong className="user-name">{displayName}</Text>
-                            <Text type="secondary" className="user-status">
-                                {isprofile === '1' ? 'Active Member' : 'Basic Profile'}
-                            </Text>
+                        {/* Brand Header */}
+                        <div className="modern-side-header">
+                            <Link to="/" className="brand-link">
+                                <img
+                                    alt="ZipcodeXpress"
+                                    className="modern-brand-img"
+                                    src="/logo-zipcodexpress.svg"
+                                />
+                            </Link>
                         </div>
-                    </div>
 
-                    <Divider style={{ margin: '16px 0' }} />
+                        {/* User Profile Section */}
+                        <div className="user-profile-section">
+                            <Avatar size={48} icon={<UserOutlined />} className="user-avatar" />
+                            <div className="user-info">
+                                <Text strong className="user-name">{displayName}</Text>
+                                <Text type="secondary" className="user-status">
+                                    {isprofile === '1' ? 'Active Member' : 'Basic Profile'}
+                                </Text>
+                            </div>
+                        </div>
 
-                    {/* Navigation Menu */}
-                    <Menu
-                        mode="inline"
-                        selectedKeys={[selectedKey]}
-                        className="modern-menu"
-                        items={[
-                            {
-                                key: 'dashboard',
-                                icon: <DashboardOutlined />,
-                                label: <Link to="/account/dashboard">
-                                    <FormattedMessage id="d" defaultMessage="Dashboard" />
-                                </Link>
-                            },
-                            {
-                                key: 'profile',
-                                icon: <UserOutlined />,
-                                label: <Link to="/account/profile">
-                                    <FormattedMessage id="page.sidnav.title.Profile" defaultMessage="Profile" />
-                                </Link>
-                            },
-                            {
-                                key: 'transactions',
-                                icon: <UnorderedListOutlined />,
-                                label: <Link to="/account/transactions">
-                                    <FormattedMessage id="page.sidnav.title.Transactions" defaultMessage="Transactions" />
-                                </Link>
-                            },
-                            {
-                                type: 'divider'
-                            },
-                            {
-                                key: 'settings',
-                                icon: <SettingOutlined />,
-                                label: 'Settings',
-                                children: [
-                                    {
-                                        key: 'changepassword',
-                                        icon: <KeyOutlined />,
-                                        label: <Link to="/account/changepassword">
-                                            <FormattedMessage id="page.sidnav.title.ChangePassword" defaultMessage="Change Password" />
-                                        </Link>
-                                    },
-                                    {
-                                        key: 'support',
-                                        icon: <QuestionCircleOutlined />,
-                                        label: <Link to="/account/support">
-                                            <FormattedMessage id="page.sidnav.title.Support" defaultMessage="Support" />
-                                        </Link>
-                                    }
-                                ]
-                            },
-                            {
-                                type: 'divider'
-                            },
-                            {
-                                key: 'logout',
-                                icon: <LogoutOutlined />,
-                                label: <Link to="/account/logout">
-                                    <FormattedMessage id="page.logout" defaultMessage="Logout" />
-                                </Link>,
-                                danger: true
-                            }
-                        ]}
-                    />
-                </Sider>
+                        <Divider style={{ margin: '16px 0' }} />
+
+                        {/* Navigation Menu */}
+                        <Menu
+                            mode="inline"
+                            selectedKeys={[selectedKey]}
+                            className="modern-menu"
+                            items={[
+                                {
+                                    key: 'dashboard',
+                                    icon: <DashboardOutlined />,
+                                    label: <Link to="/account/dashboard">
+                                        <FormattedMessage id="d" defaultMessage="Dashboard" />
+                                    </Link>
+                                },
+                                {
+                                    key: 'profile',
+                                    icon: <UserOutlined />,
+                                    label: <Link to="/account/profile">
+                                        <FormattedMessage id="page.sidnav.title.Profile" defaultMessage="Profile" />
+                                    </Link>
+                                },
+                                {
+                                    key: 'transactions',
+                                    icon: <UnorderedListOutlined />,
+                                    label: <Link to="/account/transactions">
+                                        <FormattedMessage id="page.sidnav.title.Transactions" defaultMessage="Transactions" />
+                                    </Link>
+                                },
+                                {
+                                    key: 'wallet',
+                                    icon: <WalletOutlined />,
+                                    label: <Link to="/account/wallet">
+                                        <FormattedMessage id="page.sidnav.title.Wallet" defaultMessage="Wallet" />
+                                    </Link>
+                                },
+                                {
+                                    type: 'divider'
+                                },
+                                {
+                                    key: 'settings',
+                                    icon: <SettingOutlined />,
+                                    label: 'Settings',
+                                    children: [
+                                        {
+                                            key: 'paymentmethod',
+                                            icon: <CreditCardOutlined />,
+                                            label: <Link to="/account/paymentmethod">
+                                                <FormattedMessage id="page.sidnav.title.PaymentMethod" defaultMessage="Payment Method" />
+                                            </Link>
+                                        },
+                                        {
+                                            key: 'changepassword',
+                                            icon: <KeyOutlined />,
+                                            label: <Link to="/account/changepassword">
+                                                <FormattedMessage id="page.sidnav.title.ChangePassword" defaultMessage="Change Password" />
+                                            </Link>
+                                        },
+                                        {
+                                            key: 'support',
+                                            icon: <QuestionCircleOutlined />,
+                                            label: <Link to="/account/support">
+                                                <FormattedMessage id="page.sidnav.title.Support" defaultMessage="Support" />
+                                            </Link>
+                                        }
+                                    ]
+                                },
+                                {
+                                    type: 'divider'
+                                },
+                                {
+                                    key: 'logout',
+                                    icon: <LogoutOutlined />,
+                                    label: <Link to="/account/logout">
+                                        <FormattedMessage id="page.logout" defaultMessage="Logout" />
+                                    </Link>,
+                                    danger: true
+                                }
+                            ]}
+                        />
+                    </Sider>
                 </>
             );
         }
@@ -216,13 +269,13 @@ class SideNav extends Component {
                 <>
                     {/* Mobile Overlay */}
                     {this.props.sidenav_show && (
-                        <div 
+                        <div
                             className="mobile-overlay show"
                             onClick={this.props.onOverlayClick}
                         />
                     )}
-                    
-                    <Sider 
+
+                    <Sider
                         width={250}
                         className={this.props.sidenav_show ? 'mobile-show' : ''}
                         style={{
@@ -236,56 +289,56 @@ class SideNav extends Component {
                             boxShadow: '2px 0 6px rgba(0,0,0,0.1)'
                         }}
                         theme="light"
-                >
-                    {/* Brand Header */}
-                    <div className="modern-side-header">
-                        <Link to="/" className="brand-link">
-                            <img 
-                                alt="ZipcodeXpress" 
-                                className="modern-brand-img" 
-                                src="/logo-zipcodexpress.svg" 
-                            />
-                        </Link>
-                    </div>
-
-                    {/* User Profile Section */}
-                    <div className="user-profile-section">
-                        <Avatar size={48} icon={<UserOutlined />} className="user-avatar" />
-                        <div className="user-info">
-                            <Text strong className="user-name">{displayName}</Text>
-                            <Text type="warning" className="user-status">Profile Incomplete</Text>
+                    >
+                        {/* Brand Header */}
+                        <div className="modern-side-header">
+                            <Link to="/" className="brand-link">
+                                <img
+                                    alt="ZipcodeXpress"
+                                    className="modern-brand-img"
+                                    src="/logo-zipcodexpress.svg"
+                                />
+                            </Link>
                         </div>
-                    </div>
 
-                    <Divider style={{ margin: '16px 0' }} />
+                        {/* User Profile Section */}
+                        <div className="user-profile-section">
+                            <Avatar size={48} icon={<UserOutlined />} className="user-avatar" />
+                            <div className="user-info">
+                                <Text strong className="user-name">{displayName}</Text>
+                                <Text type="warning" className="user-status">Profile Incomplete</Text>
+                            </div>
+                        </div>
 
-                    {/* Limited Navigation Menu */}
-                    <Menu
-                        mode="inline"
-                        selectedKeys={[selectedKey]}
-                        className="modern-menu"
-                        items={[
-                            {
-                                key: 'profile',
-                                icon: <UserOutlined />,
-                                label: <Link to="/account/profile">
-                                    <FormattedMessage id="page.sidnav.title.Profile" defaultMessage="Complete Profile" />
-                                </Link>
-                            },
-                            {
-                                type: 'divider'
-                            },
-                            {
-                                key: 'logout',
-                                icon: <LogoutOutlined />,
-                                label: <Link to="/logout">
-                                    <FormattedMessage id="page.logout" defaultMessage="Logout" />
-                                </Link>,
-                                danger: true
-                            }
-                        ]}
-                    />
-                </Sider>
+                        <Divider style={{ margin: '16px 0' }} />
+
+                        {/* Limited Navigation Menu */}
+                        <Menu
+                            mode="inline"
+                            selectedKeys={[selectedKey]}
+                            className="modern-menu"
+                            items={[
+                                {
+                                    key: 'profile',
+                                    icon: <UserOutlined />,
+                                    label: <Link to="/account/profile">
+                                        <FormattedMessage id="page.sidnav.title.Profile" defaultMessage="Complete Profile" />
+                                    </Link>
+                                },
+                                {
+                                    type: 'divider'
+                                },
+                                {
+                                    key: 'logout',
+                                    icon: <LogoutOutlined />,
+                                    label: <Link to="/logout">
+                                        <FormattedMessage id="page.logout" defaultMessage="Logout" />
+                                    </Link>,
+                                    danger: true
+                                }
+                            ]}
+                        />
+                    </Sider>
                 </>
             );
         }

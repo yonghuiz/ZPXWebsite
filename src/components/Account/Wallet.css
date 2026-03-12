@@ -1,0 +1,97 @@
+/* Wallet Container */
+.wallet-container {
+    padding: 24px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.wallet-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 20px;
+}
+
+/* Balance Cards */
+.balance-card {
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.balance-card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transform: translateY(-2px);
+}
+
+/* Amount Selection Cards */
+.amount-card {
+    border-radius: 8px;
+    text-align: center;
+    transition: all 0.3s ease;
+    border: 2px solid #f0f0f0;
+    cursor: pointer;
+}
+
+.amount-card:hover {
+    border-color: #1890ff;
+    box-shadow: 0 4px 12px rgba(24, 144, 255, 0.2);
+}
+
+.amount-card.selected {
+    border-color: #1890ff;
+    box-shadow: 0 4px 12px rgba(24, 144, 255, 0.3);
+    background-color: #e6f7ff;
+}
+
+.amount-card-content {
+    padding: 8px;
+}
+
+.bonus-info {
+    margin: 8px 0;
+}
+
+/* Transaction History Table */
+.wallet-container .ant-table-wrapper {
+    background: white;
+    border-radius: 8px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .wallet-container {
+        padding: 16px;
+    }
+
+    .wallet-toolbar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .amount-card {
+        margin-bottom: 12px;
+    }
+}
+
+/* Payment Method Radio Buttons */
+.ant-radio-button-wrapper {
+    text-align: left !important;
+}
+
+/* Modal Styling */
+.ant-modal-body {
+    padding: 24px;
+}
+
+/* Statistic Styling */
+.ant-statistic-title {
+    font-size: 14px;
+    color: rgba(0, 0, 0, 0.45);
+}
+
+.ant-statistic-content {
+    font-size: 24px;
+    font-weight: 600;
+}

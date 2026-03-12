@@ -47,6 +47,7 @@ class AccountHeader extends Component {
         return (
             <div>
                 <SideNav page={this.props.page}
+                    memberData={this.props.memberData}
                     sidenav_show={this.state.sidenav_show}
                     toggle={this.handleMenu}
                     onOverlayClick={this.handleOverlayClick}
